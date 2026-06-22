@@ -1,0 +1,628 @@
+---
+import Base from '../layouts/Base.astro';
+
+const proofPoints = [
+  { value: '99 ms', label: 'Boot to init', note: 'Kernel timer · Raspberry Pi 5' },
+  { value: '211 ns', label: 'Interrupt path average', note: 'Hardware entry to BPF execution' },
+  { value: '<1 µs', label: 'BPF load average', note: 'Resolution-limited at ~54 MHz' },
+  { value: '12,290 KB', label: 'Kernel heap at init', note: 'Static kernel image excluded' },
+];
+
+const comparison = [
+  {
+    metric: 'Boot to init',
+    axiom: '99 ms',
+    linux: '573.124 ms',
+    note: 'Init-related milestones; ~5.8× lower reported Axiom time.',
+  },
+  {
+    metric: 'Kernel image',
+    axiom: '10 MB',
+    linux: '~15.2 MB',
+    note: 'Linux value is the compressed vmlinuz image.',
+  },
+  {
+    metric: 'Runtime footprint',
+    axiom: '12,290 KB heap; ~22 MB image + heap',
+    linux: '~30–60 MB kernel footprint',
+    note: 'Definitions differ; shown as system context rather than a strict ratio.',
+  },
+  {
+    metric: 'BPF load',
+    axiom: '<1 µs average',
+    linux: '24.80 µs average',
+    note: 'Different load and verification paths; ~25× by the reported averages.',
+  },
+  {
+    metric: 'Interrupt latency',
+    axiom: '211 ns average',
+    linux: '2 µs average',
+    note: 'Different tools and path endpoints; ~10× by the reported averages.',
+  },
+];
+
+const linuxDetails = [
+  ['Boot to init', '573.124 ms', 'dmesg timestamp delta'],
+  ['Kernel image', '~15.2 MB', 'Compressed vmlinuz'],
+  ['Kernel footprint', '~30–60 MB', 'Kernel text + data + slab'],
+  ['Used memory, rough', '1,167,360 KB', 'Includes userspace and page cache'],
+  ['BPF load, 2 instructions', '24.80 µs', 'Average of 10 loads'],
+  ['BPF load, 2 instructions warm', '19.78 µs', 'Runs 2–10'],
+  ['BPF load, 100 instructions', '56.60 µs', 'Average of 10 loads'],
+  ['Interrupt latency', '2 µs avg / 7 µs max', 'cyclictest'],
+];
+
+const hostVerifier = [
+  ['small / minimal', '738–743 ns'],
+  ['small / arithmetic', '1.279–1.284 µs'],
+  ['10 instructions', '2.272–2.288 µs'],
+  ['50 instructions', '11.164–11.203 µs'],
+  ['100 instructions', '23.148–23.390 µs'],
+  ['500 instructions', '143.20–144.63 µs'],
+  ['1000 instructions', '311.71–314.96 µs'],
+  ['linear control flow', '1.530–1.534 µs'],
+  ['single branch', '1.798–1.803 µs'],
+  ['multi branch', '2.542–2.549 µs'],
+];
+
+const verifierHardware = [
+  ['10', '10', '1,398', '139.8', '25.9'],
+  ['50', '50', '3,974', '79.5', '73.6'],
+  ['100', '100', '7,676', '76.8', '142.1'],
+  ['500', '500', '41,533', '83.1', '769.1'],
+  ['1000', '1000', '93,551', '93.6', '1,732.4'],
+];
+
+const calibration = [
+  ['straight', 'COST_DEFAULT', '1', '0.31', '5.8', 'baseline'],
+  ['memory', 'COST_MEMORY', '2', '0.41', '7.6', 'conservative'],
+  ['div', 'COST_ALU_EXPENSIVE', '2', '0.34', '6.3', 'retuned 4→2'],
+  ['ktime', 'COST_HELPER_READ', '4', '1.18', '21.9', 'near-exact'],
+  ['map', 'COST_HELPER_MAP', '16', '4.16', '77.0', 'conservative'],
+  ['copy / gpio_get', 'COST_HELPER_COPY', '10', '2.54', '47.1', 'conservative'],
+  ['ringbuf / output', 'COST_HELPER_RINGBUF', '12', '3.24', '60.1', 'conservative'],
+  ['trace / printk', 'COST_HELPER_TRACE', '20', '—', '—', 'forbidden on embedded RT fragment'],
+];
+
+const qemu = [
+  ['Boot to init', '45 ms', '<1 s target / <500 ms stretch'],
+  ['Kernel heap', '2,231 KB', '<10 MB target / <5 MB stretch'],
+  ['BPF load', '3,787 µs average of 10', '<10 ms target / <1 ms stretch'],
+  ['Timer interval', '495 µs', 'Emulated timer; not a latency result'],
+];
+
+const methods = [
+  {
+    title: 'Boot time',
+    body: 'Kernel entry to first userspace process spawn, including memory, scheduler, BPF subsystem, and driver initialization.',
+  },
+  {
+    title: 'Kernel heap',
+    body: 'Allocator statistics for BPF programs, kernel objects, and process control blocks. Static image and frame allocator metadata are excluded.',
+  },
+  {
+    title: 'BPF load',
+    body: 'The sys_bpf(BPF_PROG_LOAD) path: instruction parsing, verification, program object creation, and JIT compilation when enabled.',
+  },
+  {
+    title: 'Interrupt latency',
+    body: 'Hardware exception entry to the first BPF instruction. Userspace wakeup, generic scheduler delay, and application processing are excluded.',
+  },
+  {
+    title: 'Timer interval',
+    body: 'A timer-hook BPF program records bpf_ktime_get_ns() values; userspace computes the interval between ring-buffer samples.',
+  },
+  {
+    title: 'Verifier-only cost',
+    body: 'verify_with_stats is isolated from the rest of BPF_PROG_LOAD and measured with CNTVCT_EL0 cycles plus states_explored.',
+  },
+];
+
+const targets = [
+  ['Kernel memory', '<10 MB', '<5 MB'],
+  ['Boot to init', '<1 s', '<500 ms'],
+  ['BPF load', '<10 ms', '<1 ms'],
+  ['Interrupt latency', '<10 µs', '<1 µs'],
+];
+---
+
+<Base title="Axiom Kernel Benchmarks" bgColor="#F9F8F3">
+
+  <!-- HERO -->
+  <section class="benchmark-hero">
+    <div class="hero-glow"></div>
+    <div class="shell hero-inner">
+      <div class="eyebrow">AxiomOS · Reproducible systems measurements</div>
+      <h1>Axiom Kernel Benchmarks<span>.</span></h1>
+      <p class="hero-copy">Measured systems performance, with the environment and path made explicit. Hardware measurements are authoritative; QEMU numbers are for development and regression work.</p>
+      <div class="hero-actions">
+        <a class="button-primary" href="https://github.com/volnlabs/axiomos" target="_blank" rel="noopener">View source repository →</a>
+        <a class="button-outline" href="#reproduce">Reproduce the results</a>
+      </div>
+      <div class="environment-grid">
+        <div><span>Hardware</span><strong>Raspberry Pi 5 Model B Rev 1.0 · 8 GB</strong></div>
+        <div><span>Processor</span><strong>Cortex-A76 · 2.4 GHz fixed</strong></div>
+        <div><span>Kernel</span><strong>axiom-ebpf · commit bedc93c</strong></div>
+        <div><span>Datasets</span><strong>2026-03-14 through 2026-06-13</strong></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PRIMARY RESULTS -->
+  <section class="section warm">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">[ 01 ] — Raspberry Pi 5</div>
+          <h2>Hardware proof points.</h2>
+        </div>
+        <p>Captured over UART with kernel markers, the userspace benchmark program, and a BPF timer probe.</p>
+      </div>
+      <div class="benchmark-grid">
+        {proofPoints.map(point => (
+          <article class="metric-card">
+            <div class="metric-value">{point.value}</div>
+            <div class="metric-label">{point.label}</div>
+            <p>{point.note}</p>
+          </article>
+        ))}
+      </div>
+      <div class="detail-grid benchmark-split">
+        <article class="detail-card">
+          <div class="card-label">Timer behavior · 100 samples</div>
+          <div class="stat-list">
+            <div><span>Interval minimum</span><strong>9,999 µs</strong></div>
+            <div><span>Interval maximum</span><strong>10,000 µs</strong></div>
+            <div><span>Interval average</span><strong>9,999 µs</strong></div>
+            <div><span>Nominal frequency</span><strong>100 Hz</strong></div>
+          </div>
+        </article>
+        <article class="detail-card">
+          <div class="card-label">Hardware entry to BPF</div>
+          <div class="stat-list">
+            <div><span>Minimum</span><strong>203 ns</strong></div>
+            <div><span>Maximum</span><strong>351 ns</strong></div>
+            <div><span>Average</span><strong>211 ns</strong></div>
+            <div><span>Path</span><strong>IRQ → BPF</strong></div>
+          </div>
+        </article>
+        <article class="detail-card">
+          <div class="card-label">BPF program load · 10 runs</div>
+          <div class="stat-list">
+            <div><span>Minimum</span><strong>&lt;1 µs</strong></div>
+            <div><span>Maximum</span><strong>2 µs</strong></div>
+            <div><span>Average</span><strong>&lt;1 µs</strong></div>
+            <div><span>Clock resolution</span><strong>~54 MHz</strong></div>
+          </div>
+        </article>
+      </div>
+      <div class="callout">
+        <span>Subsystems exercised</span>
+        <p>ARM Generic Timer · GIC interrupt controller · eBPF runtime · userspace scheduling · syscall path · timer-driven BPF execution</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPARISON -->
+  <section class="section dark">
+    <div class="shell">
+      <div class="section-heading light">
+        <div>
+          <div class="eyebrow green">[ 02 ] — Linux baseline</div>
+          <h2>Same board, qualified comparison.</h2>
+        </div>
+        <p>Linux 6.12.62+rpt-rpi-2712 on Raspberry Pi OS 64-bit, performance governor, measured 2026-03-09 over five cold boots.</p>
+      </div>
+      <div class="scope-note">
+        <strong>Comparison scope matters.</strong>
+        <p>Linux cyclictest reports scheduling and wakeup latency; Axiom measures hardware entry to BPF execution. The figures provide useful system context, but they are not identical measurements.</p>
+      </div>
+      <div class="benchmark-table-wrap">
+        <table class="benchmark-table dark-table">
+          <thead>
+            <tr><th>Metric</th><th>Axiom</th><th>Linux</th><th>Qualification</th></tr>
+          </thead>
+          <tbody>
+            {comparison.map(row => (
+              <tr>
+                <td>{row.metric}</td>
+                <td class="axiom-value">{row.axiom}</td>
+                <td>{row.linux}</td>
+                <td>{row.note}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <details class="details-panel">
+        <summary>View the full Linux baseline</summary>
+        <div class="benchmark-table-wrap">
+          <table class="benchmark-table compact dark-table">
+            <thead><tr><th>Metric</th><th>Result</th><th>Notes</th></tr></thead>
+            <tbody>
+              {linuxDetails.map(row => (
+                <tr>{row.map(cell => <td>{cell}</td>)}</tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </details>
+    </div>
+  </section>
+
+  <!-- VERIFIER -->
+  <section class="section lavender">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">[ 03 ] — Verifier scaling</div>
+          <h2>Bounded cost, measured twice.</h2>
+        </div>
+        <p>Host wall-clock and on-device cycle measurements exercise the same path-sensitive Verifier over matching loop-free programs.</p>
+      </div>
+      <div class="verifier-intro benchmark-split">
+        <article>
+          <div class="card-label">On-device · Cortex-A76 · 2026-06-11</div>
+          <p><code>states_explored == n</code> held for all 13 loaded programs: one verifier state per instruction on the loop-free fragment.</p>
+        </article>
+        <article>
+          <div class="card-label">Declared complexity budget</div>
+          <p>Verification remained near-linear through 1,000 instructions and stayed within the declared <code>T(n) = (h + 1) · n</code> budget.</p>
+        </article>
+      </div>
+      <h3>Pi 5 verification cost</h3>
+      <div class="benchmark-table-wrap">
+        <table class="benchmark-table">
+          <thead>
+            <tr><th>Instructions</th><th>states_explored</th><th>Verify cycles</th><th>Cycles / instruction</th><th>Verify µs · ~54 MHz</th></tr>
+          </thead>
+          <tbody>
+            {verifierHardware.map(row => (
+              <tr>{row.map((cell, index) => <td class={index === 0 ? 'row-key' : ''}>{cell}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <div class="two-tables benchmark-split">
+        <div>
+          <h3>Host Criterion benchmarks</h3>
+          <p class="table-note">x86_64 Linux · 95% confidence interval · 2026-06-13</p>
+          <div class="benchmark-table-wrap">
+            <table class="benchmark-table compact host-table">
+              <thead><tr><th>Benchmark</th><th>Time</th></tr></thead>
+              <tbody>
+                {hostVerifier.map(row => (
+                  <tr><td>{row[0]}</td><td>{row[1]}</td></tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div>
+          <h3>What this isolates</h3>
+          <div class="explain-card">
+            <p>The host suite calls <code>Verifier::verify</code>, the same verifier used for every kernel <code>BPF_PROG_LOAD</code>.</p>
+            <p>The hardware suite isolates <code>verify_with_stats</code>, recording both <code>states_explored</code> and a <code>CNTVCT_EL0</code> cycle delta.</p>
+            <p>This is distinct from end-to-end BPF load time, which also includes parsing, allocation, and program creation.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CALIBRATION + ADMISSION -->
+  <section class="section warm">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">[ 04 ] — WCET calibration</div>
+          <h2>From silicon cost to admission.</h2>
+        </div>
+        <p>Each shape runs 64 times through the feature-gated execution benchmark. Slopes between 100 and 1,000 instructions calibrate each static cost class.</p>
+      </div>
+      <div class="benchmark-table-wrap">
+        <table class="benchmark-table">
+          <thead>
+            <tr><th>Class</th><th>Model constant</th><th>Weight</th><th>Measured cycles / op</th><th>ns / op</th><th>Verdict</th></tr>
+          </thead>
+          <tbody>
+            {calibration.map(row => (
+              <tr>{row.map((cell, index) => <td class={index === 0 ? 'row-key' : ''}>{cell}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="table-note">The second hardware capture reproduced the compute-class slopes within approximately 1%. Trace output is serial-I/O-bound at 115200 8N1, so it is controlled by policy rather than assigned an execution weight.</p>
+
+      <div class="admission-grid">
+        <article class="admission-card blue">
+          <span>Cycle conversion</span>
+          <strong>CYCLE_UNIT_NS = 6</strong>
+          <p>Approximately 5.74 ns per unit, rounded upward.</p>
+        </article>
+        <article class="admission-card">
+          <span>Single program</span>
+          <strong>≈166,666 units</strong>
+          <p>One invocation must fit the 1 ms control-loop period.</p>
+        </article>
+        <article class="admission-card">
+          <span>Cumulative utilization</span>
+          <strong>5e8 ns/s</strong>
+          <p>The attachment ledger reserves at most half of one CPU core.</p>
+        </article>
+      </div>
+      <div class="gate-result">
+        <div>
+          <div class="card-label">On-hardware utilization gate</div>
+          <div class="gate-marker">attached=14 rc=-1 PASS</div>
+        </div>
+        <p>Fourteen copy-heavy programs at <code>wcet=5586</code> commit approximately <code>4.69e8 ns/s</code>. The 15th attach is rejected because it would cross the <code>5e8 ns/s</code> budget.</p>
+      </div>
+      <div class="policy-row benchmark-split">
+        <article>
+          <span>Printk policy</span>
+          <p><code>bpf_trace_printk</code> is rejected at load on the embedded real-time fragment with <code>HelperForbiddenOnRtFragment</code>.</p>
+        </article>
+        <article>
+          <span>Structural gate finding</span>
+          <p>The 4,096-instruction syscall cap keeps reachable programs far below the single-program budget. Cumulative attachment utilization is the gate that constrains the current system.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- QEMU -->
+  <section class="section blue-section">
+    <div class="shell">
+      <div class="section-heading light">
+        <div>
+          <div class="eyebrow pale">[ 05 ] — QEMU x86_64</div>
+          <h2>Development environment, not a hardware baseline.</h2>
+        </div>
+        <p>QEMU is useful for functional testing, development iteration, and regression detection. Virtualized interrupts, memory access, and synthetic timers introduce timing distortions.</p>
+      </div>
+      <div class="benchmark-table-wrap">
+        <table class="benchmark-table blue-table">
+          <thead><tr><th>Metric</th><th>Result</th><th>Proposal reference</th></tr></thead>
+          <tbody>
+            {qemu.map(row => (
+              <tr>{row.map(cell => <td>{cell}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+      <p class="section-footnote">Environment: QEMU x86_64, 2 GB RAM, Axiom development branch, measured with <code>userspace/benchmark</code> on 2026-03-06.</p>
+    </div>
+  </section>
+
+  <!-- METHODOLOGY -->
+  <section class="section warm" id="methodology">
+    <div class="shell">
+      <div class="section-heading">
+        <div>
+          <div class="eyebrow">[ 06 ] — Measurement methodology</div>
+          <h2>Define the endpoint before the number.</h2>
+        </div>
+        <p>Every result is tied to a path, environment, and measurement boundary.</p>
+      </div>
+      <div class="method-grid">
+        {methods.map(method => (
+          <article>
+            <h3>{method.title}</h3>
+            <p>{method.body}</p>
+          </article>
+        ))}
+      </div>
+      <div class="path-panel">
+        <div class="card-label">Interrupt execution path</div>
+        <pre>Timer IRQ (hardware signal)
+  ↓
+ARM exception entry · CNTVCT_EL0 timestamp
+  ↓
+Minimal ISR · save_context
+  ↓
+BPF interpreter dispatch · handle_interrupt
+  ↓
+BPF program start · bpf_ktime_get_ns()
+  ↓
+Ring buffer event
+  ↓
+Userspace benchmark tool</pre>
+      </div>
+      <h3>Proposal targets</h3>
+      <div class="benchmark-table-wrap">
+        <table class="benchmark-table compact target-table">
+          <thead><tr><th>Metric</th><th>Target</th><th>Stretch</th></tr></thead>
+          <tbody>
+            {targets.map(row => (
+              <tr>{row.map(cell => <td>{cell}</td>)}</tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPRODUCE -->
+  <section class="section dark" id="reproduce">
+    <div class="shell">
+      <div class="section-heading light">
+        <div>
+          <div class="eyebrow green">[ 07 ] — Reproduce</div>
+          <h2>Build, capture, reduce.</h2>
+        </div>
+        <p>The source, benchmark binaries, instrumentation markers, and reduction script live with AxiomOS.</p>
+      </div>
+      <div class="command-grid benchmark-split">
+        <article>
+          <div class="card-label">Clone</div>
+          <pre><code>git clone https://github.com/volnlabs/axiomos
+cd axiomos</code></pre>
+        </article>
+        <article>
+          <div class="card-label">Raspberry Pi 5 release</div>
+          <pre><code>./scripts/build-rpi5.sh release \
+  --features embedded-rpi5</code></pre>
+        </article>
+        <article>
+          <div class="card-label">Host verifier</div>
+          <pre><code>cargo bench -p kernel_bpf --bench verifier --features embedded-profile</code></pre>
+        </article>
+        <article>
+          <div class="card-label">Verifier-cost kernel</div>
+          <pre><code>./scripts/build-rpi5.sh release \
+  --features embedded-rpi5,verifier-cost</code></pre>
+        </article>
+        <article class="wide-command">
+          <div class="card-label">Reduce UART capture</div>
+          <pre><code>scripts/verifier-cost.py verifier-cost.log \
+  -o verifier-cost.csv \
+  --plot verifier-cost.png \
+  --cntfrq 54000000</code></pre>
+        </article>
+      </div>
+      <a class="repo-link" href="https://github.com/volnlabs/axiomos" target="_blank" rel="noopener">github.com/volnlabs/axiomos →</a>
+    </div>
+  </section>
+
+  <!-- LIMITS -->
+  <section class="section limits">
+    <div class="shell limits-grid benchmark-split">
+      <div>
+        <div class="eyebrow">[ 08 ] — Current limits</div>
+        <h2>What these results do not claim.</h2>
+      </div>
+      <div class="limit-list">
+        <p><span>01</span>PREVAIL head-to-head has not yet run; it requires a separate harness.</p>
+        <p><span>02</span>Hook fire frequency currently uses one nominal 1 kHz control-loop rate. Per-hook and caller-declared frequencies remain future work.</p>
+        <p><span>03</span>Linux cyclictest and Axiom IRQ-to-BPF latency have different endpoints and should not be read as an apples-to-apples scheduler comparison.</p>
+        <p><span>04</span>QEMU timing is non-authoritative. Raspberry Pi 5 hardware is the benchmark reference.</p>
+      </div>
+    </div>
+  </section>
+
+</Base>
+
+<style>
+  .shell { max-width:1200px; margin:0 auto; padding-left:32px; padding-right:32px; }
+  .benchmark-hero { position:relative; overflow:hidden; background:#F9F8F3; border-bottom:1px solid rgba(10,10,11,0.1); }
+  .hero-glow { position:absolute; width:680px; height:680px; top:-330px; right:-150px; border-radius:999px; background:radial-gradient(circle, rgba(220,252,115,0.78) 0%, rgba(220,252,115,0) 68%); }
+  .hero-inner { position:relative; padding-top:112px; padding-bottom:66px; }
+  .eyebrow, .card-label { font-size:10.5px; letter-spacing:0.18em; text-transform:uppercase; color:#054FF0; }
+  .eyebrow.green { color:#DCFC73; }
+  .eyebrow.pale { color:rgba(249,248,243,0.7); }
+  h1, h2, h3 { font-family:'Bricolage Grotesque', sans-serif; }
+  h1 { max-width:13ch; margin:18px 0 0; font-size:clamp(42px,6vw,76px); line-height:0.96; letter-spacing:-0.025em; }
+  h1 span { color:#054FF0; }
+  .hero-copy { max-width:65ch; margin:24px 0 0; font-size:15px; line-height:1.75; color:rgba(10,10,11,0.7); }
+  .hero-actions { display:flex; gap:12px; flex-wrap:wrap; margin-top:30px; }
+  .button-primary, .button-outline { text-decoration:none; padding:14px 22px; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; }
+  .button-primary { background:#054FF0; color:#F9F8F3; }
+  .button-primary:hover { background:#043bc0; }
+  .button-outline { border:1px solid rgba(10,10,11,0.26); }
+  .button-outline:hover { border-color:#0a0a0b; }
+  .environment-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:52px; border-top:1px solid rgba(10,10,11,0.14); border-bottom:1px solid rgba(10,10,11,0.14); }
+  .environment-grid div { min-height:92px; padding:18px; border-right:1px solid rgba(10,10,11,0.1); }
+  .environment-grid div:first-child { padding-left:0; }
+  .environment-grid div:last-child { border-right:0; }
+  .environment-grid span { display:block; font-size:9.5px; text-transform:uppercase; letter-spacing:0.14em; color:rgba(10,10,11,0.45); }
+  .environment-grid strong { display:block; margin-top:8px; font-size:12px; line-height:1.5; font-weight:400; }
+  .section { padding:84px 0; }
+  .warm { background:#F9F8F3; }
+  .lavender { background:#F0E8F9; }
+  .dark { background:#100F0D; color:#F9F8F3; }
+  .blue-section { background:#054FF0; color:#F9F8F3; }
+  .limits { background:#DDE7FE; }
+  .section-heading { display:flex; justify-content:space-between; gap:40px; align-items:flex-end; margin-bottom:34px; }
+  .section-heading > div { max-width:680px; }
+  .section-heading h2, .limits h2 { margin:14px 0 0; font-size:clamp(30px,4.2vw,50px); line-height:1; letter-spacing:-0.015em; }
+  .section-heading > p { max-width:48ch; margin:0; font-size:12.5px; line-height:1.7; color:rgba(10,10,11,0.62); }
+  .section-heading.light > p { color:rgba(249,248,243,0.66); }
+  .benchmark-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:14px; }
+  .metric-card { background:#fff; border:1px solid rgba(10,10,11,0.1); border-radius:18px; padding:24px; min-height:190px; box-shadow:0 12px 28px rgba(10,10,11,0.035); }
+  .metric-value { font-family:'Bricolage Grotesque', sans-serif; font-size:44px; line-height:1; letter-spacing:-0.02em; }
+  .metric-label { margin-top:18px; font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#054FF0; }
+  .metric-card p { margin:10px 0 0; font-size:11.5px; line-height:1.55; color:rgba(10,10,11,0.58); }
+  .detail-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:14px; }
+  .detail-card { border:1px solid rgba(10,10,11,0.1); border-radius:16px; padding:22px; background:#F4F1E8; }
+  .stat-list { margin-top:14px; border-top:1px solid rgba(10,10,11,0.12); }
+  .stat-list div { display:flex; justify-content:space-between; gap:16px; padding:11px 0; border-bottom:1px solid rgba(10,10,11,0.08); font-size:11px; }
+  .stat-list span { color:rgba(10,10,11,0.55); }
+  .stat-list strong { font-weight:400; }
+  .callout { margin-top:22px; padding:18px 22px; border-left:3px solid #054FF0; background:#DDE7FE; }
+  .callout span { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#054FF0; }
+  .callout p { margin:8px 0 0; font-size:12px; line-height:1.6; }
+  .scope-note { display:grid; grid-template-columns:0.3fr 1fr; gap:28px; margin-bottom:22px; padding:20px 22px; border:1px solid rgba(220,252,115,0.3); background:rgba(220,252,115,0.06); }
+  .scope-note strong { color:#DCFC73; font-size:12px; text-transform:uppercase; letter-spacing:0.1em; }
+  .scope-note p { margin:0; color:rgba(249,248,243,0.75); font-size:12px; line-height:1.65; }
+  .benchmark-table-wrap { overflow-x:auto; -webkit-overflow-scrolling:touch; }
+  .benchmark-table { width:100%; min-width:760px; border-collapse:collapse; font-size:11.5px; }
+  .benchmark-table th, .benchmark-table td { text-align:left; vertical-align:top; padding:14px 16px; border-bottom:1px solid rgba(10,10,11,0.1); line-height:1.55; }
+  .benchmark-table th { font-size:9.5px; letter-spacing:0.13em; text-transform:uppercase; color:rgba(10,10,11,0.48); font-weight:400; }
+  .benchmark-table td { color:rgba(10,10,11,0.72); }
+  .benchmark-table .row-key { color:#0a0a0b; }
+  .dark-table th, .dark-table td { border-color:rgba(249,248,243,0.12); }
+  .dark-table th { color:rgba(249,248,243,0.42); }
+  .dark-table td { color:rgba(249,248,243,0.72); }
+  .dark-table .axiom-value { color:#DCFC73; }
+  .blue-table th, .blue-table td { border-color:rgba(249,248,243,0.22); color:rgba(249,248,243,0.84); }
+  .blue-table th { color:rgba(249,248,243,0.62); }
+  .details-panel { margin-top:22px; border:1px solid rgba(249,248,243,0.14); }
+  .details-panel summary { padding:16px 18px; cursor:pointer; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:#DCFC73; }
+  .details-panel .benchmark-table-wrap { padding:0 18px 18px; }
+  .compact { min-width:560px; }
+  .verifier-intro { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-bottom:36px; }
+  .verifier-intro article, .explain-card { padding:22px; background:rgba(255,255,255,0.65); border:1px solid rgba(10,10,11,0.08); border-radius:16px; }
+  .verifier-intro p, .explain-card p { margin:12px 0 0; font-size:12px; line-height:1.7; color:rgba(10,10,11,0.7); }
+  code { font-family:'Space Mono', monospace; }
+  .section h3 { margin:34px 0 14px; font-size:23px; font-weight:500; }
+  .two-tables { display:grid; grid-template-columns:1fr 1fr; gap:28px; margin-top:28px; }
+  .two-tables h3 { margin-bottom:6px; }
+  .table-note, .section-footnote { font-size:10.5px; line-height:1.65; color:rgba(10,10,11,0.52); }
+  .host-table { min-width:480px; }
+  .admission-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:28px; }
+  .admission-card { border:1px solid rgba(10,10,11,0.12); background:#fff; border-radius:16px; padding:22px; }
+  .admission-card.blue { background:#DDE7FE; }
+  .admission-card span { font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(10,10,11,0.5); }
+  .admission-card strong { display:block; margin-top:12px; font-family:'Bricolage Grotesque', sans-serif; font-size:27px; font-weight:500; }
+  .admission-card p { margin:10px 0 0; font-size:11px; line-height:1.55; color:rgba(10,10,11,0.58); }
+  .gate-result { display:grid; grid-template-columns:0.8fr 1.2fr; gap:34px; align-items:center; margin-top:14px; background:#100F0D; color:#F9F8F3; border-radius:18px; padding:26px; }
+  .gate-marker { margin-top:10px; font-family:'Bricolage Grotesque', sans-serif; font-size:28px; color:#DCFC73; }
+  .gate-result p { margin:0; font-size:12px; line-height:1.7; color:rgba(249,248,243,0.72); }
+  .policy-row { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
+  .policy-row article { padding:20px; border:1px solid rgba(10,10,11,0.12); border-radius:16px; }
+  .policy-row span { font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:#054FF0; }
+  .policy-row p { font-size:11.5px; line-height:1.65; color:rgba(10,10,11,0.66); }
+  .section-footnote { color:rgba(249,248,243,0.65); margin:20px 0 0; }
+  .method-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; }
+  .method-grid article { border:1px solid rgba(10,10,11,0.1); border-radius:16px; padding:22px; background:#fff; }
+  .method-grid h3 { margin:0; font-size:21px; }
+  .method-grid p { margin:12px 0 0; font-size:11.5px; line-height:1.65; color:rgba(10,10,11,0.64); }
+  .path-panel { margin-top:28px; padding:24px; background:#100F0D; color:#F9F8F3; border-radius:18px; }
+  .path-panel pre { margin:18px 0 0; overflow:auto; font-family:'Space Mono', monospace; font-size:11.5px; line-height:1.8; color:rgba(249,248,243,0.8); }
+  .target-table { max-width:760px; }
+  .command-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .command-grid article { border:1px solid rgba(249,248,243,0.14); border-radius:14px; padding:18px; min-width:0; }
+  .command-grid pre { margin:12px 0 0; overflow:auto; white-space:pre-wrap; overflow-wrap:anywhere; font-size:10.5px; line-height:1.7; color:rgba(249,248,243,0.78); }
+  .wide-command { grid-column:1 / -1; }
+  .repo-link { display:inline-block; margin-top:26px; color:#DCFC73; text-decoration:none; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; }
+  .limits-grid { display:grid; grid-template-columns:0.8fr 1.2fr; gap:64px; }
+  .limit-list { border-top:1px solid rgba(10,10,11,0.16); }
+  .limit-list p { display:flex; gap:18px; margin:0; padding:16px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:12px; line-height:1.65; color:rgba(10,10,11,0.7); }
+  .limit-list span { color:#054FF0; flex:none; }
+  @media (max-width:900px) {
+    .benchmark-grid, .environment-grid { grid-template-columns:repeat(2,1fr); }
+    .environment-grid div:nth-child(2) { border-right:0; }
+    .environment-grid div:first-child { padding-left:18px; }
+    .benchmark-split, .section-heading, .gate-result, .scope-note, .limits-grid { grid-template-columns:1fr !important; }
+    .section-heading { display:grid; align-items:start; }
+    .method-grid, .admission-grid { grid-template-columns:1fr 1fr; }
+  }
+  @media (max-width:560px) {
+    .benchmark-grid, .environment-grid, .method-grid, .admission-grid { grid-template-columns:1fr; }
+    .environment-grid div { border-right:0; }
+    .hero-inner { padding-top:104px; }
+    .section { padding:64px 0; }
+    .shell { padding-left:22px; padding-right:22px; }
+  }
+</style>

@@ -93,18 +93,19 @@ import Base from '../layouts/Base.astro';
       </div>
       <div style="margin-top:64px; padding-top:24px; border-top:1px solid rgba(249,248,243,0.16); display:flex; gap:48px; flex-wrap:wrap;">
         <div style="flex:1; min-width:200px;">
-          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1;">1.00 kHz</div>
-          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">Control loop</div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1;">99 ms</div>
+          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">Boot to init · Raspberry Pi 5</div>
         </div>
         <div style="flex:1; min-width:200px;">
-          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1;">4&micro;s</div>
-          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">Worst-case jitter</div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1;">211 ns</div>
+          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">Hardware entry to BPF · average</div>
         </div>
         <div style="flex:1; min-width:200px;">
-          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1; color:#DCFC73;">Admitted</div>
-          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">Every behavior, before hardware</div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:40px; line-height:1; color:#DCFC73;">&lt;1 &micro;s</div>
+          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:8px;">BPF program load · average</div>
         </div>
       </div>
+      <a href="/benchmarks" style="display:inline-block; margin-top:30px; color:#DCFC73; text-decoration:none; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase;">Review benchmark methodology →</a>
     </div>
   </section>
 
