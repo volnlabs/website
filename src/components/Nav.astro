@@ -85,6 +85,20 @@ const { theme = 'light' } = Astro.props;
     padding: 8px 16px;
   }
   .nav-cta:hover { background: #043bc0; }
+  @media (max-width: 680px) {
+    #nav-inner {
+      justify-content: center;
+      padding-left: 10px;
+      padding-right: 10px;
+    }
+    #nav-logo { display: none; }
+    #nav-pill {
+      max-width: calc(100vw - 20px);
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    #nav-pill::-webkit-scrollbar { display: none; }
+  }
 </style>
 
 <script>

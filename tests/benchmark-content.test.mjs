@@ -59,3 +59,12 @@ test('site surfaces benchmarks without retaining the unsupported jitter claim', 
   assert.match(openSource, /href="\/benchmarks"/);
   assert.match(footer, /href="\/benchmarks"/);
 });
+
+test('shared navigation contains a mobile overflow guard', async () => {
+  const nav = await read('src/components/Nav.astro');
+
+  assert.match(nav, /@media \(max-width: 680px\)/);
+  assert.match(nav, /#nav-logo\s*\{\s*display:\s*none;/);
+  assert.match(nav, /max-width:\s*calc\(100vw - 20px\)/);
+  assert.match(nav, /overflow-x:\s*auto/);
+});
