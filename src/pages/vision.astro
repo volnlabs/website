@@ -1,0 +1,108 @@
+---
+import Base from '../layouts/Base.astro';
+
+const principles = [
+  { n: '01', title: 'Scientific Rigor', body: 'Every claim should be measurable, reproducible, and experimentally validated.' },
+  { n: '02', title: 'Systems Thinking', body: 'Progress comes from integrating disciplines, not optimizing isolated components.' },
+  { n: '03', title: 'Safety First', body: 'Adaptive systems must stay verifiable and understandable even as they evolve.' },
+  { n: '04', title: 'Open Research', body: 'Whenever possible, research is published, documented, and shared with the community.' },
+];
+const nearTerm = [
+  'Public release of AxiomOS',
+  'Initial Neuro Systems experiments',
+  'Eidos research prototype',
+  'DistriProc prototype',
+  'First research publications',
+];
+const longTerm = [
+  'Adaptive robotics platform',
+  'Human intent interfaces',
+  'Verified runtime evolution',
+  'Distributed intelligent robot fleets',
+  'Computational neuroscience contributions',
+];
+---
+<Base title="Vision" bgColor="#F9F8F3">
+
+  <!-- HEADER -->
+  <section style="position:relative; overflow:hidden; border-bottom:1px solid rgba(10,10,11,0.08);">
+    <div style="position:absolute; top:-200px; left:-140px; width:560px; height:560px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(221,231,254,0.9) 0%, rgba(221,231,254,0) 68%); pointer-events:none;"></div>
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px 68px; position:relative;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">Vision &amp; Mission</div>
+      <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(34px, 5.4vw, 68px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0; max-width:18ch;">Building the foundations of adaptive intelligent systems<span style="color:#054FF0;">.</span></h1>
+      <p style="font-size:15px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:62ch; margin:24px 0 0;">From understanding biological intelligence to building the operating systems that safely execute it — VolnLabs exists to build the scientific and engineering foundations of machines that adapt.</p>
+    </div>
+  </section>
+
+  <!-- THE PROBLEM -->
+  <section style="background:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:84px 32px;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">[ 01 ] — The Problem</div>
+      <div style="display:grid; grid-template-columns:1.1fr 0.9fr; gap:56px; margin-top:24px; align-items:start;">
+        <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(26px, 3.6vw, 43px); line-height:1.05; letter-spacing:-0.01em; margin:0;">Today's intelligent systems are fragmented. We believe they are parts of the same problem.</h2>
+        <div>
+          <div style="border-top:1px solid rgba(10,10,11,0.14);">
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:13.5px;"><span style="color:rgba(10,10,11,0.55);">Artificial intelligence</span><span>learns.</span></div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:13.5px;"><span style="color:rgba(10,10,11,0.55);">Operating systems</span><span>execute.</span></div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:13.5px;"><span style="color:rgba(10,10,11,0.55);">Robots</span><span>interact with the world.</span></div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:13.5px;"><span style="color:rgba(10,10,11,0.55);">Distributed systems</span><span>coordinate computation.</span></div>
+            <div style="display:flex; justify-content:space-between; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:13.5px;"><span style="color:rgba(10,10,11,0.55);">Neuroscience</span><span>studies biological intelligence.</span></div>
+          </div>
+          <p style="font-size:14px; line-height:1.75; color:rgba(10,10,11,0.72); margin:22px 0 0;">VolnLabs exists to build the scientific and engineering foundations of adaptive intelligent systems — treating these not as separate fields, but as layers of one question.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CENTRAL QUESTION -->
+  <section style="background:#054FF0; color:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:92px 32px;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(249,248,243,0.7);">[ 02 ] — Research Philosophy · One central question</div>
+      <blockquote style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(26px, 4.4vw, 51px); line-height:1.08; letter-spacing:-0.01em; margin:22px 0 0; max-width:24ch;">How can intelligent systems continuously adapt while remaining understandable, verifiable, and safe?</blockquote>
+      <p style="font-size:14.5px; line-height:1.75; color:rgba(249,248,243,0.82); margin:26px 0 0; max-width:64ch;">Answering this requires progress across multiple layers of the computing stack — not improvements to any single model or algorithm. Four research programs each address one layer of the same question.</p>
+    </div>
+  </section>
+
+  <!-- PRINCIPLES -->
+  <section style="background:#F0E8F9;">
+    <div style="max-width:1200px; margin:0 auto; padding:84px 32px;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">[ 03 ] — Research Principles</div>
+      <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(26px, 4vw, 44px); line-height:1.0; margin:16px 0 36px;">How we work.</h2>
+      <div style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px;">
+        {principles.map(pr => (
+          <div style="background:#fff; border:1px solid rgba(10,10,11,0.08); border-radius:20px; padding:24px; min-height:200px; box-shadow:0 12px 30px rgba(10,10,11,0.04);">
+            <div style="width:30px; height:30px; border-radius:999px; background:#DDE7FE; display:flex; align-items:center; justify-content:center; font-size:12px; color:#054FF0;">{pr.n}</div>
+            <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:25px; line-height:1.05; margin-top:18px;">{pr.title}</div>
+            <p style="font-size:12.5px; line-height:1.65; color:rgba(10,10,11,0.68); margin:12px 0 0;">{pr.body}</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- ROADMAP -->
+  <section style="background:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:84px 32px;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">[ 04 ] — Roadmap</div>
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:56px; margin-top:28px;">
+        <div>
+          <div style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:#054FF0; margin-bottom:6px;">Near term</div>
+          <div style="border-top:1px solid rgba(10,10,11,0.14);">
+            {nearTerm.map(n => (
+              <div style="display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.08); font-size:13.5px;"><span style="color:#054FF0;">→</span><span>{n}</span></div>
+            ))}
+          </div>
+        </div>
+        <div>
+          <div style="font-size:11px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,11,0.45); margin-bottom:6px;">Long term</div>
+          <div style="border-top:1px solid rgba(10,10,11,0.14);">
+            {longTerm.map(l => (
+              <div style="display:flex; gap:14px; padding:14px 0; border-bottom:1px solid rgba(10,10,11,0.08); font-size:13.5px; color:rgba(10,10,11,0.7);"><span style="color:rgba(10,10,11,0.35);">○</span><span>{l}</span></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</Base>

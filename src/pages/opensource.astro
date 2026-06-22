@@ -1,0 +1,52 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Open Source" bgColor="#F9F8F3">
+
+  <!-- HEADER -->
+  <section style="position:relative; overflow:hidden; border-bottom:1px solid rgba(10,10,11,0.08);">
+    <div style="position:absolute; top:-200px; right:-140px; width:560px; height:560px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(236,253,176,0.85) 0%, rgba(236,253,176,0) 66%); pointer-events:none;"></div>
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px 60px; position:relative;">
+      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">Open Source</div>
+      <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(34px, 5.4vw, 68px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0; max-width:16ch;">Research should be reproducible<span style="color:#054FF0;">.</span></h1>
+      <p style="font-size:15px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:60ch; margin:24px 0 0;">Selected projects are released as open source following publication or intellectual property review — so others can verify, extend, and build on the work.</p>
+    </div>
+  </section>
+
+  <!-- REPOS -->
+  <section style="background:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:64px 32px 40px;">
+      <div style="background:#fff; border:1px solid rgba(10,10,11,0.1); border-radius:20px; padding:36px; display:grid; grid-template-columns:0.9fr 1.1fr; gap:44px; box-shadow:0 12px 30px rgba(10,10,11,0.04); align-items:center;">
+        <div>
+          <div style="display:flex; align-items:center; gap:12px;">
+            <span style="width:13px; height:13px; border-radius:999px; background:#DCFC73; flex:none;"></span>
+            <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6b15; background:#ECFDB0; border-radius:999px; padding:5px 11px;">Releasing</span>
+          </div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(40px,5vw,60px); line-height:0.95; margin-top:18px; letter-spacing:-0.02em;">AxiomOS</div>
+          <div style="font-size:12px; color:rgba(10,10,11,0.5); margin-top:14px; word-break:break-all;">github.com/volnlabs/axiomos</div>
+        </div>
+        <div>
+          <p style="font-size:14.5px; line-height:1.7; color:rgba(10,10,11,0.72); margin:0;">Robotics OS with verified runtime behaviors, admission control, and a hardware-independent emergency stop. Raspberry Pi 5 support.</p>
+          <div style="margin-top:22px; background:#0a0a0b; color:#F9F8F3; border-radius:12px; padding:16px 18px; font-size:12.5px; letter-spacing:0.02em;"><span style="color:rgba(249,248,243,0.4);">$</span> git clone github.com/volnlabs/axiomos</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REPRODUCIBILITY -->
+  <section style="background:#0a0a0b; color:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px; display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+      <div>
+        <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#DCFC73;">Why we open source</div>
+        <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(24px, 3.6vw, 39px); line-height:1.06; margin:16px 0 0;">A result you can't reproduce isn't a result yet.</h2>
+      </div>
+      <div style="display:flex; flex-direction:column; gap:0; border-top:1px solid rgba(249,248,243,0.16);">
+        <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Code released alongside or after the paper it supports.</span></div>
+        <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Hardware-independent where possible — AxiomOS runs on a Raspberry Pi 5.</span></div>
+        <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Permissive licensing for research and education use.</span></div>
+        <a href="mailto:research@kernex.sbs" style="display:inline-block; margin-top:24px; text-decoration:none; background:#DCFC73; color:#0a0a0b; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:13px 20px; border-radius:999px;">Contribute or report issues →</a>
+      </div>
+    </div>
+  </section>
+
+</Base>

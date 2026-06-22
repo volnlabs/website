@@ -1,0 +1,63 @@
+---
+import Base from '../layouts/Base.astro';
+
+const pubs = [
+  { year: '2026', title: 'AxiomOS: A Verified Runtime for Safe Robot Behavior Evolution', authors: 'VolnLabs Systems Group', program: 'AxiomOS', status: 'In prep' },
+  { year: '2026', title: 'Admission Control for Worst-Case Timing in Hot-Swappable Behaviors', authors: 'VolnLabs Systems Group', program: 'AxiomOS', status: 'In prep' },
+];
+---
+<Base title="Publications" bgColor="#F9F8F3">
+
+  <!-- HEADER -->
+  <section style="position:relative; overflow:hidden; border-bottom:1px solid rgba(10,10,11,0.08);">
+    <div style="position:absolute; top:-200px; left:-140px; width:540px; height:540px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(221,231,254,0.9) 0%, rgba(221,231,254,0) 68%); pointer-events:none;"></div>
+    <div style="max-width:1200px; margin:0 auto; padding:80px 32px 60px; position:relative; display:flex; justify-content:space-between; align-items:flex-end; gap:32px; flex-wrap:wrap;">
+      <div>
+        <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">Publications</div>
+        <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(34px, 5.4vw, 68px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0;">Selected &amp; forthcoming<span style="color:#054FF0;">.</span></h1>
+        <p style="font-size:15px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:56ch; margin:22px 0 0;">Papers describing systems, architectures, experiments, and prototypes. Released following review.</p>
+      </div>
+      <div style="display:flex; gap:28px; flex:none;">
+        <div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:48px; line-height:1;">02</div>
+          <div style="font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(10,10,11,0.5); margin-top:4px;">In preparation</div>
+        </div>
+        <div>
+          <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:48px; line-height:1; color:#054FF0;">01</div>
+          <div style="font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(10,10,11,0.5); margin-top:4px;">Program</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FILTERS -->
+  <section style="background:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:28px 32px 0;">
+      <div style="display:flex; gap:8px; flex-wrap:wrap;">
+        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; background:#0a0a0b; color:#F9F8F3; border-radius:999px; padding:8px 15px;">All</span>
+        <span style="font-size:11px; letter-spacing:0.08em; text-transform:uppercase; background:#fff; border:1px solid rgba(10,10,11,0.16); border-radius:999px; padding:8px 15px; color:rgba(10,10,11,0.7);">AxiomOS</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- LIST -->
+  <section style="background:#F9F8F3;">
+    <div style="max-width:1200px; margin:0 auto; padding:28px 32px 84px;">
+      <div style="border-top:1px solid rgba(10,10,11,0.16);">
+        {pubs.map(pub => (
+          <div style="display:grid; grid-template-columns:70px 1fr 160px 130px; gap:24px; align-items:center; padding:24px 0; border-bottom:1px solid rgba(10,10,11,0.1);">
+            <div style="font-size:13px; color:rgba(10,10,11,0.45);">{pub.year}</div>
+            <div>
+              <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:23px; line-height:1.2;">{pub.title}</div>
+              <div style="font-size:11px; color:rgba(10,10,11,0.5); margin-top:6px; letter-spacing:0.04em;">{pub.authors}</div>
+            </div>
+            <div style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:rgba(10,10,11,0.6);">{pub.program}</div>
+            <div style="justify-self:end; font-size:10.5px; letter-spacing:0.08em; text-transform:uppercase; color:#054FF0; background:#DDE7FE; border-radius:999px; padding:7px 14px;">{pub.status}</div>
+          </div>
+        ))}
+      </div>
+      <p style="font-size:12.5px; line-height:1.7; color:rgba(10,10,11,0.55); margin:28px 0 0; max-width:60ch;">Preprints and code are released as each paper clears review. To be notified, write to <a href="mailto:research@kernex.sbs" style="color:#054FF0; text-decoration:none;">research@kernex.sbs</a>.</p>
+    </div>
+  </section>
+
+</Base>
