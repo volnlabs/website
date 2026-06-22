@@ -158,6 +158,39 @@ test('rejects non-JSON and malformed JSON requests', async () => {
   });
 });
 
+test('rejects lookalike JSON content types', async () => {
+  let calls = 0;
+  const response = await handleContactRequest(makeRequest(validSubmission, {
+    contentType: 'application/jsonp',
+  }), {
+    sendEmail: async () => {
+      calls += 1;
+    },
+  });
+
+  assert.equal(response.status, 400);
+  assert.equal(calls, 0);
+});
+
+test('rejects oversized request bodies before delivery', async () => {
+  let calls = 0;
+  const response = await handleContactRequest(makeRequest({
+    ...validSubmission,
+    padding: 'x'.repeat(20_000),
+  }), {
+    sendEmail: async () => {
+      calls += 1;
+    },
+  });
+
+  assert.equal(response.status, 400);
+  assert.deepEqual(await readJson(response), {
+    ok: false,
+    error: 'Invalid form submission.',
+  });
+  assert.equal(calls, 0);
+});
+
 test('rejects a populated honeypot without sending email', async () => {
   let calls = 0;
   const response = await handleContactRequest(makeRequest({

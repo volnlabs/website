@@ -121,7 +121,25 @@ export async function handleContactRequest(request, {
   }
 
   const contentType = request.headers.get('content-type') ?? '';
-  if (!contentType.toLowerCase().startsWith('application/json')) {
+  const mediaType = contentType.split(';', 1)[0].trim().toLowerCase();
+  if (mediaType !== 'application/json') {
+    return jsonResponse(400, {
+      ok: false,
+      error: 'Invalid form submission.',
+    });
+  }
+
+  let requestBody;
+  try {
+    requestBody = await request.text();
+  } catch {
+    return jsonResponse(400, {
+      ok: false,
+      error: 'Invalid form submission.',
+    });
+  }
+
+  if (requestBody.length > 12_000) {
     return jsonResponse(400, {
       ok: false,
       error: 'Invalid form submission.',
@@ -130,7 +148,7 @@ export async function handleContactRequest(request, {
 
   let raw;
   try {
-    raw = await request.json();
+    raw = JSON.parse(requestBody);
   } catch {
     return jsonResponse(400, {
       ok: false,
