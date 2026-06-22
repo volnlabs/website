@@ -7,16 +7,16 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
 
   <section style="position:relative; overflow:hidden;">
     <div style="position:absolute; top:-160px; right:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(221,231,254,0.9) 0%, rgba(221,231,254,0) 68%); pointer-events:none;"></div>
-    <div style="max-width:1200px; margin:0 auto; padding:80px 32px 88px; position:relative; display:grid; grid-template-columns:1fr 1fr; gap:64px; align-items:start;">
+    <div class="contact-grid">
 
-      <div>
+      <div class="contact-intro">
         <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">Collaborate</div>
         <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(32px, 4.8vw, 58px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0; max-width:16ch;">If our questions are your questions, let's talk<span style="color:#054FF0;">.</span></h1>
         <p style="font-size:14.5px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:50ch; margin:22px 0 0;">VolnLabs is an independent research laboratory. We welcome collaboration with researchers, engineers, universities, and industry partners working on adaptive intelligent systems.</p>
 
-        <a href="mailto:research@volnlabs.com" style="display:inline-flex; align-items:center; gap:12px; margin-top:28px; text-decoration:none; background:#0a0a0b; color:#F9F8F3; border-radius:16px; padding:18px 22px;">
+        <a href="mailto:research@volnlabs.com" class="direct-email">
           <span style="width:9px; height:9px; border-radius:999px; background:#DCFC73;"></span>
-          <span style="font-family:'Bricolage Grotesque', sans-serif; font-size:24px;">research@volnlabs.com</span>
+          <span>research@volnlabs.com</span>
         </a>
 
         <div style="margin-top:36px;">
@@ -29,32 +29,36 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
         </div>
       </div>
 
-      <!-- FORM (mailto on submit — no server) -->
-      <div style="background:#fff; border:1px solid rgba(10,10,11,0.1); border-radius:24px; padding:32px; box-shadow:0 24px 60px rgba(10,10,11,0.07);">
+      <div class="form-card">
         <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:30px; line-height:1; margin:0 0 4px;">Start a conversation</div>
         <div style="font-size:12px; color:rgba(10,10,11,0.55); margin-bottom:24px;">We read every message and reply within a few days.</div>
 
-        <form id="contact-form" style="display:flex; flex-direction:column; gap:18px;">
-          <div style="display:grid; grid-template-columns:1fr 1fr; gap:14px;">
+        <form id="contact-form" class="contact-form">
+          <div class="name-email-grid">
             <label style="display:block;">
               <span class="field-label">Name</span>
-              <input id="f-name" type="text" placeholder="Ada Lovelace" class="field-input">
+              <input id="f-name" name="name" type="text" autocomplete="name" placeholder="Ada Lovelace" class="field-input" required minlength="2" maxlength="100">
             </label>
             <label style="display:block;">
               <span class="field-label">Email</span>
-              <input id="f-email" type="email" placeholder="ada@lab.edu" class="field-input">
+              <input id="f-email" name="email" type="email" autocomplete="email" placeholder="ada@lab.edu" class="field-input" required maxlength="254">
             </label>
           </div>
           <label style="display:block;">
             <span class="field-label">Organization</span>
-            <input id="f-org" type="text" placeholder="University · company · independent" class="field-input">
+            <input id="f-org" name="organization" type="text" autocomplete="organization" placeholder="University · company · independent" class="field-input" maxlength="150">
           </label>
           <label style="display:block;">
             <span class="field-label">What would you like to explore?</span>
-            <textarea id="f-msg" rows="4" placeholder="A few lines about the problem you're working on…" class="field-input" style="resize:vertical;"></textarea>
+            <textarea id="f-msg" name="message" rows="4" placeholder="A few lines about the problem you're working on…" class="field-input" style="resize:vertical;" required minlength="10" maxlength="5000"></textarea>
           </label>
-          <button type="submit" class="submit-btn">Send message →</button>
-          <div style="font-size:11px; color:rgba(10,10,11,0.45); text-align:center;">Or email us directly at research@volnlabs.com</div>
+          <div class="honeypot" aria-hidden="true">
+            <label for="f-company">Company website</label>
+            <input id="f-company" name="company" type="text" tabindex="-1" autocomplete="off">
+          </div>
+          <button id="submit-button" type="submit" class="submit-btn">Send message →</button>
+          <p id="form-status" class="form-status" role="status" aria-live="polite"></p>
+          <div style="font-size:11px; color:rgba(10,10,11,0.45); text-align:center;">Or <a href="mailto:research@volnlabs.com">email us directly</a> at research@volnlabs.com</div>
         </form>
       </div>
 
@@ -64,23 +68,80 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
 </Base>
 
 <style>
+  .contact-grid { max-width:1200px; margin:0 auto; padding:80px 32px 88px; position:relative; display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:64px; align-items:start; }
+  .contact-intro, .form-card, .name-email-grid > * { min-width:0; }
+  .direct-email { display:inline-flex; align-items:center; gap:12px; max-width:100%; margin-top:28px; text-decoration:none; background:#0a0a0b; color:#F9F8F3; border-radius:16px; padding:18px 22px; font-family:'Bricolage Grotesque', sans-serif; font-size:24px; overflow-wrap:anywhere; }
+  .form-card { background:#fff; border:1px solid rgba(10,10,11,0.1); border-radius:24px; padding:32px; box-shadow:0 24px 60px rgba(10,10,11,0.07); }
+  .contact-form { display:flex; flex-direction:column; gap:18px; }
+  .name-email-grid { display:grid; grid-template-columns:minmax(0, 1fr) minmax(0, 1fr); gap:14px; }
   .field-label { display:block; font-size:10.5px; letter-spacing:0.12em; text-transform:uppercase; color:rgba(10,10,11,0.55); margin-bottom:8px; }
   .field-input { width:100%; font-family:'Space Mono', monospace; font-size:13px; color:#0a0a0b; background:#F9F8F3; border:1px solid rgba(10,10,11,0.16); border-radius:12px; padding:13px 14px; }
   .field-input:focus { outline:none; border-color:#054FF0; }
   .field-input::placeholder { color:rgba(10,10,11,0.4); }
   .submit-btn { width:100%; font-family:'Space Mono', monospace; font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:#F9F8F3; background:#054FF0; border:none; border-radius:12px; padding:15px; cursor:pointer; }
   .submit-btn:hover { background:#043bc0; }
+  .submit-btn:disabled { cursor:wait; opacity:0.7; }
+  .form-status { min-height:18px; margin:0; font-size:11.5px; line-height:1.5; text-align:center; }
+  .form-status[data-state='success'] { color:#176b36; }
+  .form-status[data-state='error'] { color:#a52222; }
+  .honeypot { position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap; }
+
+  @media (max-width: 760px) {
+    .contact-grid { grid-template-columns:minmax(0, 1fr); gap:40px; padding:92px 22px 64px; }
+    .name-email-grid { grid-template-columns:minmax(0, 1fr); }
+    .form-card { padding:24px; border-radius:20px; }
+    .direct-email { width:100%; padding:16px 18px; font-size:clamp(17px, 5.8vw, 24px); }
+  }
 </style>
 
 <script>
-  document.getElementById('contact-form')?.addEventListener('submit', (e) => {
+  const form = document.getElementById('contact-form');
+  const submitButton = document.getElementById('submit-button');
+  const status = document.getElementById('form-status');
+
+  form?.addEventListener('submit', async (e) => {
     e.preventDefault();
-    const name = (document.getElementById('f-name') as HTMLInputElement).value;
-    const email = (document.getElementById('f-email') as HTMLInputElement).value;
-    const org = (document.getElementById('f-org') as HTMLInputElement).value;
-    const msg = (document.getElementById('f-msg') as HTMLTextAreaElement).value;
-    const body = encodeURIComponent(`Name: ${name}\nOrganization: ${org}\n\n${msg}`);
-    const subject = encodeURIComponent(`Collaboration inquiry from ${name}`);
-    window.location.href = `mailto:research@volnlabs.com?subject=${subject}&body=${body}`;
+
+    if (!(form instanceof HTMLFormElement) ||
+        !(submitButton instanceof HTMLButtonElement) ||
+        !(status instanceof HTMLElement)) {
+      return;
+    }
+
+    const originalLabel = submitButton.textContent ?? 'Send message →';
+    submitButton.disabled = true;
+    submitButton.textContent = 'Sending…';
+    status.textContent = '';
+    delete status.dataset.state;
+
+    try {
+      const response = await fetch('/api/contact', {
+        method: 'POST',
+        headers: {
+          'content-type': 'application/json',
+        },
+        body: JSON.stringify(Object.fromEntries(new FormData(form).entries())),
+      });
+      const result = await response.json().catch(() => null) as {
+        ok?: boolean;
+        error?: string;
+      } | null;
+
+      if (!response.ok || !result?.ok) {
+        throw new Error(result?.error || 'We could not send your message. Please email research@volnlabs.com directly.');
+      }
+
+      form.reset();
+      status.dataset.state = 'success';
+      status.textContent = 'Message sent. We will get back to you within a few days.';
+    } catch (error) {
+      status.dataset.state = 'error';
+      status.textContent = error instanceof Error
+        ? error.message
+        : 'We could not send your message. Please email research@volnlabs.com directly.';
+    } finally {
+      submitButton.disabled = false;
+      submitButton.textContent = originalLabel;
+    }
   });
 </script>
