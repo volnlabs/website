@@ -220,7 +220,7 @@ Run:
 ```bash
 npm test
 npm run build
-rg -n 'api/contact|form-status|name="company"|required|maxlength="5000"' dist/contact/index.html
+rg -n 'api/contact|form-status|name="company"|required|maxlength="5000"' .vercel/output/static/contact/index.html
 ```
 
 Expected: tests and build pass; all four form contract markers are present.
