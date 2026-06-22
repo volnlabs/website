@@ -23,11 +23,11 @@ import Base from '../layouts/Base.astro';
             <span style="font-size:10px; letter-spacing:0.1em; text-transform:uppercase; color:#5a6b15; background:#ECFDB0; border-radius:999px; padding:5px 11px;">Releasing</span>
           </div>
           <div style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(40px,5vw,60px); line-height:0.95; margin-top:18px; letter-spacing:-0.02em;">AxiomOS</div>
-          <div style="font-size:12px; color:rgba(10,10,11,0.5); margin-top:14px; word-break:break-all;">github.com/volnlabs/axiomos</div>
+          <a href="https://github.com/volnlabs/axiomos" target="_blank" rel="noopener" style="display:inline-block; font-size:12px; color:#054FF0; margin-top:14px; word-break:break-all; text-decoration:none;">github.com/volnlabs/axiomos →</a>
         </div>
         <div>
           <p style="font-size:14.5px; line-height:1.7; color:rgba(10,10,11,0.72); margin:0;">Robotics OS with verified runtime behaviors, admission control, and a hardware-independent emergency stop. Raspberry Pi 5 support.</p>
-          <div style="margin-top:22px; background:#0a0a0b; color:#F9F8F3; border-radius:12px; padding:16px 18px; font-size:12.5px; letter-spacing:0.02em;"><span style="color:rgba(249,248,243,0.4);">$</span> git clone github.com/volnlabs/axiomos</div>
+          <div style="margin-top:22px; background:#0a0a0b; color:#F9F8F3; border-radius:12px; padding:16px 18px; font-size:12.5px; letter-spacing:0.02em; overflow:auto;"><span style="color:rgba(249,248,243,0.4);">$</span> git clone https://github.com/volnlabs/axiomos</div>
         </div>
       </div>
     </div>
@@ -35,18 +35,41 @@ import Base from '../layouts/Base.astro';
 
   <!-- REPRODUCIBILITY -->
   <section style="background:#0a0a0b; color:#F9F8F3;">
-    <div style="max-width:1200px; margin:0 auto; padding:80px 32px; display:grid; grid-template-columns:1fr 1fr; gap:56px; align-items:center;">
+    <div class="repro-grid" style="max-width:1200px; margin:0 auto; padding:80px 32px; display:grid; grid-template-columns:0.8fr 1.2fr; gap:56px; align-items:start;">
       <div>
         <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#DCFC73;">Why we open source</div>
         <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(24px, 3.6vw, 39px); line-height:1.06; margin:16px 0 0;">A result you can't reproduce isn't a result yet.</h2>
+        <p style="font-size:12.5px; line-height:1.7; color:rgba(249,248,243,0.62); margin:20px 0 0;">The benchmark suite publishes its environment, measurement boundary, build flags, and reduction commands alongside each result.</p>
       </div>
-      <div style="display:flex; flex-direction:column; gap:0; border-top:1px solid rgba(249,248,243,0.16);">
+      <div style="display:flex; flex-direction:column; gap:0;">
+        <div style="border-top:1px solid rgba(249,248,243,0.16);">
         <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Code released alongside or after the paper it supports.</span></div>
         <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Hardware-independent where possible — AxiomOS runs on a Raspberry Pi 5.</span></div>
         <div style="display:flex; gap:14px; padding:16px 0; border-bottom:1px solid rgba(249,248,243,0.12); font-size:13.5px; color:rgba(249,248,243,0.82);"><span style="color:#DCFC73;">→</span><span>Permissive licensing for research and education use.</span></div>
-        <a href="mailto:research@volnlabs.com" style="display:inline-block; margin-top:24px; text-decoration:none; background:#DCFC73; color:#0a0a0b; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:13px 20px; border-radius:999px;">Contribute or report issues →</a>
+        </div>
+        <div class="repro-command">
+          <span>Build Raspberry Pi 5 release</span>
+          <code>./scripts/build-rpi5.sh release --features embedded-rpi5</code>
+        </div>
+        <div class="repro-command">
+          <span>Run host verifier benchmarks</span>
+          <code>cargo bench -p kernel_bpf --bench verifier --features embedded-profile</code>
+        </div>
+        <div style="display:flex; gap:12px; flex-wrap:wrap; margin-top:24px;">
+          <a href="/benchmarks" style="display:inline-block; text-decoration:none; background:#DCFC73; color:#0a0a0b; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:13px 20px; border-radius:999px;">Read benchmark methodology →</a>
+          <a href="mailto:research@volnlabs.com" style="display:inline-block; text-decoration:none; border:1px solid rgba(249,248,243,0.3); color:#F9F8F3; font-size:11px; letter-spacing:0.08em; text-transform:uppercase; padding:13px 20px; border-radius:999px;">Contribute or report issues →</a>
+        </div>
       </div>
     </div>
   </section>
 
 </Base>
+
+<style>
+  .repro-command { margin-top:14px; padding:16px 18px; border:1px solid rgba(249,248,243,0.14); border-radius:12px; }
+  .repro-command span { display:block; font-size:9.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); }
+  .repro-command code { display:block; margin-top:10px; overflow-wrap:anywhere; font-family:'Space Mono', monospace; font-size:11px; line-height:1.6; color:#DCFC73; }
+  @media (max-width:760px) {
+    .repro-grid { grid-template-columns:1fr !important; }
+  }
+</style>
