@@ -14,9 +14,9 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
         <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(32px, 4.8vw, 58px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0; max-width:16ch;">If our questions are your questions, let's talk<span style="color:#054FF0;">.</span></h1>
         <p style="font-size:14.5px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:50ch; margin:22px 0 0;">VolnLabs is an independent research laboratory. We welcome collaboration with researchers, engineers, universities, and industry partners working on adaptive intelligent systems.</p>
 
-        <a href="mailto:research@kernex.sbs" style="display:inline-flex; align-items:center; gap:12px; margin-top:28px; text-decoration:none; background:#0a0a0b; color:#F9F8F3; border-radius:16px; padding:18px 22px;">
+        <a href="mailto:research@volnlabs.com" style="display:inline-flex; align-items:center; gap:12px; margin-top:28px; text-decoration:none; background:#0a0a0b; color:#F9F8F3; border-radius:16px; padding:18px 22px;">
           <span style="width:9px; height:9px; border-radius:999px; background:#DCFC73;"></span>
-          <span style="font-family:'Bricolage Grotesque', sans-serif; font-size:24px;">research@kernex.sbs</span>
+          <span style="font-family:'Bricolage Grotesque', sans-serif; font-size:24px;">research@volnlabs.com</span>
         </a>
 
         <div style="margin-top:36px;">
@@ -54,7 +54,7 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
             <textarea id="f-msg" rows="4" placeholder="A few lines about the problem you're working on…" class="field-input" style="resize:vertical;"></textarea>
           </label>
           <button type="submit" class="submit-btn">Send message →</button>
-          <div style="font-size:11px; color:rgba(10,10,11,0.45); text-align:center;">Or email us directly at research@kernex.sbs</div>
+          <div style="font-size:11px; color:rgba(10,10,11,0.45); text-align:center;">Or email us directly at research@volnlabs.com</div>
         </form>
       </div>
 
@@ -81,6 +81,6 @@ const collaborators = ['Universities', 'Independent researchers', 'Robotics comp
     const msg = (document.getElementById('f-msg') as HTMLTextAreaElement).value;
     const body = encodeURIComponent(`Name: ${name}\nOrganization: ${org}\n\n${msg}`);
     const subject = encodeURIComponent(`Collaboration inquiry from ${name}`);
-    window.location.href = `mailto:research@kernex.sbs?subject=${subject}&body=${body}`;
+    window.location.href = `mailto:research@volnlabs.com?subject=${subject}&body=${body}`;
   });
 </script>

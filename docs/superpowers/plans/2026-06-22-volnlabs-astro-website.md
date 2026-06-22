@@ -127,7 +127,7 @@ Culture values + open roles + collaborators from DC script.
 **Files:**
 - Create: `src/pages/contact.astro`
 
-Form submit = mailto:research@kernex.sbs (no server POST). Keep full form UI from DC design.
+Form submit = mailto:research@volnlabs.com (no server POST). Keep full form UI from DC design.
 
 ---
 

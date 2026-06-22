@@ -42,7 +42,7 @@ public/
 | Publications | `voln-publications.dc.html` | |
 | Open Source | `voln-opensource.dc.html` | |
 | People | `voln-people.dc.html` | Utkarsh Maurya: projects.utkarshmaurya@gmail.com, linkedin.com/in/utkarsh_maurya_connect, @gilfoyle_v2 |
-| Contact | `voln-contact.dc.html` | Display only: research@kernex.sbs |
+| Contact | `voln-contact.dc.html` | Display only: research@volnlabs.com |
 
 ## Shared Components
 
@@ -57,7 +57,7 @@ public/
 ### Footer.astro
 - Dark background `#0a0a0b`, 4-column grid
 - Columns: Brand + CTA | Explore | Lab | Connect
-- Copyright: `© 2026 VolnLabs · voln.systems`
+- Copyright: `© 2026 VolnLabs · volnlabs.com`
 
 ### Base.astro
 - Google Fonts preconnect + stylesheet
@@ -81,7 +81,7 @@ public/
 | Font display | Bricolage Grotesque |
 
 ## Contact Page
-Display `research@kernex.sbs` as mailto link. No form submission. Show collaboration invitation text from DC design.
+Display `research@volnlabs.com` as mailto link. No form submission. Show collaboration invitation text from DC design.
 
 ## People Page
 Single person card: Utkarsh Maurya
