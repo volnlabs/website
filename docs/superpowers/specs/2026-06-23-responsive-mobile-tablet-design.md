@@ -8,6 +8,9 @@
 Make the VolnLabs marketing site (Astro, 8 pages) usable on tablet and mobile.
 Preserve the current desktop design almost entirely. Small diff, low risk.
 
+**Priority:** desktop layout is the source of truth. Mobile adapts to desktop, never the
+other way around — no fix for a small screen may change the `≥1024px` rendering.
+
 ## Context
 
 - Astro static site, `output: 'static'`, Vercel adapter.
@@ -59,37 +62,46 @@ fit();
 window.addEventListener("resize", fit, { passive: true });
 ```
 
-**Shared global `<style>`** (added to the existing `is:global` block) — semantic, reusable
-utilities. These are the ONLY shared classes; do not introduce `.col-2/3/4`.
+Performance: the resize handler only mutates `document.documentElement.style.zoom`; no layout
+recalculation is introduced beyond the browser reflow that any zoom change triggers. Acceptable
+for a `resize`-frequency listener.
+
+**Shared global `<style>`** (added to the existing `is:global` block) — only behavior that is
+genuinely common goes here. Layout assumptions (how many columns a given grid has, and how a grid
+behaves at the tablet tier) stay **page-specific**. Do not introduce `.col-2/3/4` or a
+`.container-pad`.
 
 ```css
-/* container padding shrinks with breakpoints */
-.container-pad { padding-left: 32px; padding-right: 32px; }
+/* multi-column grid -> single column at mobile. Tablet-tier behavior (e.g. 4->2)
+   is decided per page, since it depends on that grid's desktop column count. */
+.responsive-grid { }            /* page sets desktop columns inline/in its own <style> */
 
-/* multi-column grid that collapses: N cols -> 2 (tablet) -> 1 (mobile) */
-.responsive-grid { }            /* page sets its own desktop columns inline/in-page */
-
-/* two-pane asymmetric split (e.g. 1.1fr 0.9fr) -> stacked on tablet down */
+/* two-pane asymmetric split (e.g. 1.1fr 0.9fr) -> stacked at tablet down */
 .responsive-split { }
 
 /* horizontal-scroll wrapper for wide tables */
 .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
 
 @media (max-width: 1024px) {
-  .responsive-grid { grid-template-columns: repeat(2, 1fr) !important; }
   .responsive-split { grid-template-columns: 1fr !important; }
-  .container-pad { padding-left: 24px; padding-right: 24px; }
 }
 @media (max-width: 640px) {
   .responsive-grid { grid-template-columns: 1fr !important; }
-  .container-pad { padding-left: 20px; padding-right: 20px; }
 }
 ```
 
-Naming rule: a class goes in the shared layer only if it is genuinely reused. `.responsive-grid`
-and `.responsive-split` describe intent, not column count — so a 3-col grid tagged
-`.responsive-grid` won't read as a lie later. Page-unique behavior stays in that page's
-`<style>`.
+Why no universal tablet collapse: forcing every `.responsive-grid` to `repeat(2,1fr)` at 1024
+would needlessly rewrite grids that are already 2-col on desktop. A 4-col grid that wants `4→2→1`
+adds its own `@media (max-width:1024px){ grid-template-columns:repeat(2,1fr) }` in-page. The
+shared layer only guarantees the universal truth: everything collapses to one column on a phone.
+
+**Container padding** (`32→24→20px`): handled in each page's own `@media` blocks, not a global
+utility — most sections are inline-styled, so a `.container-pad` class would have to be tagged
+onto nearly every section. Less indirection to set it where the breakpoint already lives.
+
+Naming rule: a class goes in the shared layer only if genuinely reused. `.responsive-grid` /
+`.responsive-split` describe intent, not column count — a 3-col grid tagged `.responsive-grid`
+won't read as a lie later.
 
 ### 2. Per-page tagging + fixes
 
@@ -104,7 +116,9 @@ and `.responsive-split` describe intent, not column count — so a 3-col grid ta
 - **`publications`** — `70px 1fr 160px 130px` row → stack `≤640`.
 - **`benchmarks`** — wrap `.compact` and `.host-table` in `<div class="table-scroll">`. Verify
   its existing `@media (max-width:900px)` still composes with the new 1024/640 rules (adjust the
-  900 breakpoint to 1024 if it conflicts).
+  900 breakpoint to 1024 if it conflicts). **Convention:** every wide table added to the site
+  from now on must be wrapped in `.table-scroll`, so the horizontal-overflow bug can't be
+  reintroduced one page at a time.
 - **`research` / `opensource` / `contact`** — already have `@media`; verify they still look right
   at the new test sizes; align stray breakpoints (760/800px) toward 1024/640 only if they cause
   visible breaks. No gratuitous rewrites.
@@ -117,8 +131,15 @@ and `.responsive-split` describe intent, not column count — so a 3-col grid ta
 
 **1440, 1280, 1024, 768, 430, 390, 360 px.**
 
-Check for: horizontal scroll (except intended `.table-scroll`), overlapping/clipped text,
-collapsed grids reading correctly, hero canvas present and proportioned, nav reachable.
+Check for:
+- horizontal scroll (except intended `.table-scroll`)
+- overlapping / clipped text
+- collapsed grids reading correctly
+- hero canvas present and proportioned
+- nav reachable
+- keyboard navigation still works (tab order, focus visible)
+- no CLS during resize — crossing the 1024 boundary must not jump layout beyond the intended
+  zoom-on/zoom-off change
 
 ## Out of scope
 
