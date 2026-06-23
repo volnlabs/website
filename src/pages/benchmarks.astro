@@ -237,6 +237,7 @@ const targets = [
       <details class="details-panel">
         <summary>View the full Linux baseline</summary>
         <div class="benchmark-table-wrap">
+          <div class="table-scroll">
           <table class="benchmark-table compact dark-table">
             <thead><tr><th>Metric</th><th>Result</th><th>Notes</th></tr></thead>
             <tbody>
@@ -245,6 +246,7 @@ const targets = [
               ))}
             </tbody>
           </table>
+          </div>
         </div>
       </details>
     </div>
@@ -288,6 +290,7 @@ const targets = [
           <h3>Host Criterion benchmarks</h3>
           <p class="table-note">x86_64 Linux · 95% confidence interval · 2026-06-13</p>
           <div class="benchmark-table-wrap">
+            <div class="table-scroll">
             <table class="benchmark-table compact host-table">
               <thead><tr><th>Benchmark</th><th>Time</th></tr></thead>
               <tbody>
@@ -296,6 +299,7 @@ const targets = [
                 ))}
               </tbody>
             </table>
+            </div>
           </div>
         </div>
         <div>
@@ -431,6 +435,7 @@ Userspace benchmark tool</pre>
       </div>
       <h3>Proposal targets</h3>
       <div class="benchmark-table-wrap">
+        <div class="table-scroll">
         <table class="benchmark-table compact target-table">
           <thead><tr><th>Metric</th><th>Target</th><th>Stretch</th></tr></thead>
           <tbody>
@@ -439,6 +444,7 @@ Userspace benchmark tool</pre>
             ))}
           </tbody>
         </table>
+        </div>
       </div>
     </div>
   </section>
@@ -610,7 +616,7 @@ cd axiomos</code></pre>
   .limit-list { border-top:1px solid rgba(10,10,11,0.16); }
   .limit-list p { display:flex; gap:18px; margin:0; padding:16px 0; border-bottom:1px solid rgba(10,10,11,0.1); font-size:12px; line-height:1.65; color:rgba(10,10,11,0.7); }
   .limit-list span { color:#054FF0; flex:none; }
-  @media (max-width:900px) {
+  @media (max-width:1024px) {
     .benchmark-grid, .environment-grid { grid-template-columns:repeat(2,1fr); }
     .environment-grid div:nth-child(2) { border-right:0; }
     .environment-grid div:first-child { padding-left:18px; }
@@ -618,11 +624,11 @@ cd axiomos</code></pre>
     .section-heading { display:grid; align-items:start; }
     .method-grid, .admission-grid { grid-template-columns:1fr 1fr; }
   }
-  @media (max-width:560px) {
+  @media (max-width:640px) {
     .benchmark-grid, .environment-grid, .method-grid, .admission-grid { grid-template-columns:1fr; }
     .environment-grid div { border-right:0; }
     .hero-inner { padding-top:104px; }
     .section { padding:64px 0; }
-    .shell { padding-left:22px; padding-right:22px; }
+    .shell { padding-left:20px; padding-right:20px; }
   }
 </style>
