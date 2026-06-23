@@ -113,4 +113,11 @@
     letter-spacing: 0.04em;
     color: rgba(249,248,243,0.45);
   }
+  @media (max-width: 1024px) {
+    .footer-grid { grid-template-columns: 1fr 1fr; }
+  }
+  @media (max-width: 640px) {
+    .footer-grid { grid-template-columns: 1fr; gap: 32px; }
+    .footer-inner { padding-left: 20px; padding-right: 20px; }
+  }
 </style>
