@@ -13,7 +13,7 @@ const links = [
   <section style="position:relative; overflow:hidden; min-height:72vh; display:flex; align-items:center;">
     <div style="position:absolute; top:-160px; right:-120px; width:520px; height:520px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(221,231,254,0.9) 0%, rgba(221,231,254,0) 68%); pointer-events:none;"></div>
 
-    <div style="max-width:1200px; margin:0 auto; padding:96px 32px; position:relative;">
+    <div class="nf-wrap" style="max-width:1200px; margin:0 auto; padding:96px 32px; position:relative;">
       <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">Error 404</div>
 
       <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(64px, 16vw, 200px); line-height:0.9; letter-spacing:-0.03em; margin:14px 0 0;">404<span style="color:#054FF0;">.</span></h1>
@@ -37,3 +37,9 @@ const links = [
   </section>
 
 </Base>
+
+<style>
+  @media (max-width:640px) {
+    .nf-wrap { padding-left:20px !important; padding-right:20px !important; }
+  }
+</style>
