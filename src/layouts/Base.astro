@@ -46,23 +46,28 @@ const fullTitle = `${title} — VolnLabs`;
     *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #054FF0; color: #F9F8F3; }
     a { color: inherit; }
+    .responsive-split { }
+    .responsive-grid { }
+    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
+    @media (max-width: 1024px) {
+      .responsive-split { grid-template-columns: 1fr !important; }
+    }
+    @media (max-width: 640px) {
+      .responsive-grid { grid-template-columns: 1fr !important; }
+    }
   </style>
 <script is:inline>
-  (function () {
-    const BASE_SCALE = 0.68;
-
-    function fit() {
-      const scale = Math.min(
-        BASE_SCALE * Math.max(window.innerWidth / 1200, 1),
-        1.12
-      );
-
+  function fit() {
+    if (window.innerWidth >= 1024) {
+      const scale = Math.min(0.68 * Math.max(window.innerWidth / 1200, 1), 1.12);
       document.documentElement.style.zoom = scale;
+    } else {
+      document.documentElement.style.zoom = "";
     }
+  }
 
-    fit();
-    window.addEventListener("resize", fit, { passive: true });
-  })();
+  fit();
+  window.addEventListener("resize", fit, { passive: true });
 </script>
 </head>
 <body style={`font-family:'Space Mono', monospace; -webkit-font-smoothing:antialiased; background:${bgColor}; color:#0a0a0b; overflow-x:hidden;`}>
