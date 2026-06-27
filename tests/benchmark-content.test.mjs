@@ -60,6 +60,13 @@ test('site surfaces benchmarks without retaining the unsupported jitter claim', 
   assert.match(footer, /href="\/benchmarks"/);
 });
 
+test('shared footer lists official company social channels', async () => {
+  const footer = await read('src/components/Footer.astro');
+
+  assert.match(footer, /href="https:\/\/www\.linkedin\.com\/company\/volnlabs"/);
+  assert.match(footer, /href="https:\/\/x\.com\/volnlabs"/);
+});
+
 test('shared navigation contains a mobile overflow guard', async () => {
   const nav = await read('src/components/Nav.astro');
 
