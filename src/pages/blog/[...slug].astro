@@ -1,0 +1,53 @@
+---
+import Base from '../../layouts/Base.astro';
+import { getCollection, render } from 'astro:content';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const fmt = (d: Date) =>
+  d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+---
+<Base title={post.data.title} description={post.data.description} bgColor="#F9F8F3">
+
+  <article class="post" style="max-width:720px; margin:0 auto; padding:120px 32px 96px;">
+    <a href="/blog" style="font-size:11px; letter-spacing:0.1em; text-transform:uppercase; color:#054FF0; text-decoration:none;">← Blog</a>
+
+    <div style="margin-top:28px; display:flex; gap:14px; align-items:center; font-size:12px; color:rgba(10,10,11,0.5);">
+      <span style="letter-spacing:0.08em; text-transform:uppercase; color:#054FF0; background:#DDE7FE; border-radius:999px; padding:5px 12px;">{post.data.tag}</span>
+      <span>{fmt(post.data.date)}</span>
+      <span>·</span>
+      <span>{post.data.author}</span>
+    </div>
+
+    <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(30px, 4.6vw, 52px); line-height:1.05; letter-spacing:-0.015em; margin:20px 0 0;">{post.data.title}</h1>
+    <p style="font-size:17px; line-height:1.7; color:rgba(10,10,11,0.6); margin:20px 0 0;">{post.data.description}</p>
+
+    <div class="prose" style="margin-top:40px; border-top:1px solid rgba(10,10,11,0.12); padding-top:40px;">
+      <Content />
+    </div>
+  </article>
+
+<style is:global>
+  .prose { font-size:16px; line-height:1.8; color:rgba(10,10,11,0.86); }
+  .prose h2 { font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:26px; line-height:1.2; letter-spacing:-0.01em; margin:44px 0 14px; }
+  .prose h3 { font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:20px; margin:32px 0 12px; }
+  .prose p { margin:0 0 20px; }
+  .prose a { color:#054FF0; }
+  .prose ul, .prose ol { margin:0 0 20px; padding-left:22px; }
+  .prose li { margin:0 0 10px; }
+  .prose strong { font-weight:700; }
+  .prose blockquote { margin:0 0 24px; padding:6px 0 6px 22px; border-left:3px solid #054FF0; font-family:'Bricolage Grotesque', sans-serif; font-size:22px; line-height:1.4; color:rgba(10,10,11,0.82); }
+  .prose blockquote p { margin:0; }
+  .prose code { font-family:'Space Mono', monospace; font-size:13.5px; background:rgba(10,10,11,0.05); border-radius:4px; padding:2px 6px; }
+  .prose pre { background:#0a0a0b; color:#F9F8F3; border-radius:12px; padding:20px 22px; overflow-x:auto; margin:0 0 24px; }
+  .prose pre code { background:none; padding:0; font-size:13px; line-height:1.6; }
+  @media (max-width: 640px) {
+    .post { padding-left:20px !important; padding-right:20px !important; }
+  }
+</style>
+</Base>
