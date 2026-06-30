@@ -8,6 +8,10 @@ import sitemap from '@astrojs/sitemap';
 export default defineConfig({
   site: 'https://www.volnlabs.com',
   output: 'static',
-  adapter: vercel(),
+  adapter: vercel({
+    webAnalytics: {
+      enabled: true,
+    },
+  }),
   integrations: [sitemap()],
 });
