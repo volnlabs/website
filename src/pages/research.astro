@@ -1,139 +1,74 @@
 ---
 import Base from '../layouts/Base.astro';
+import '../styles/minimal.css';
 
-const stack = [
-  { dot: '#054FF0', name: 'Step 01', verb: 'Authenticate', note: 'Every behavior is signed and identified before load.', arrow: '' },
-  { dot: '#E1D2F3', name: 'Step 02', verb: 'Analyze', note: 'Static safety and timing are checked ahead of time.', arrow: '↓' },
-  { dot: '#DCFC73', name: 'Step 03', verb: 'Admit', note: 'Only behaviors that fit the worst-case budget run.', arrow: '↓' },
-  { dot: 'rgba(249,248,243,0.6)', name: 'Step 04', verb: 'Contain', note: 'A reference monitor and hardware e-stop bound it.', arrow: '↓' },
+const papers = [
+  {
+    status: 'ACCEPTED · POSTER',
+    title: 'An Authority Lifecycle for Self-Modifying Embodied Agents',
+    venue: 'AgenticOS Workshop @ NeurIPS 2026',
+    abstract: 'Authority lifecycle for agents that modify and publish their own executable behavior at runtime. Separates proposal, activation, execution, resource, and effect authority. Versioned grants, continuous revalidation at privileged effects.',
+  },
+  {
+    status: 'ACCEPTED',
+    title: 'Who Guards the Update? Transactional Publication Semantics for Continually Learning Embodied Agents',
+    venue: 'CL4FMAgents Workshop @ NeurIPS 2026',
+    abstract: 'Safe publication of controller and behavior updates in continually learning embodied agents. Transactional semantics so stale or superseded behavior cannot keep control during updates. Part of AxiomOS’s runtime-evolution model.',
+  },
 ];
-const areas = ['Verified Runtime', 'Static Safety', 'Timing Admission', 'Behavior Auth', 'Reference Monitor', 'Hardware E-Stop'];
 ---
-<Base title="Research" description="Research at VolnLabs across neuroscience, operating systems, distributed systems, and robotics — toward adaptive intelligence." bgColor="#F9F8F3">
+<Base title="Research" description="VolnLabs research on how robots can safely take on new behavior while they run: admission, authority, and recovery. Papers at NeurIPS 2026 workshops." bgColor="#000">
+  <div class="min">
+    <main style="padding-top:56px;">
+      <a href="/" class="brand">
+        <img src="/mark-light.png" alt="" style="height:18px;">
+        <span>voln labs</span>
+      </a>
 
-  <!-- HEADER -->
-  <section style="position:relative; overflow:hidden; border-bottom:1px solid rgba(10,10,11,0.08);">
-    <div style="position:absolute; top:-200px; right:-140px; width:560px; height:560px; border-radius:50%; background:radial-gradient(circle at 50% 50%, rgba(225,210,243,0.8) 0%, rgba(225,210,243,0) 68%); pointer-events:none;"></div>
-    <div style="max-width:1200px; margin:0 auto; padding:80px 32px 60px; position:relative;">
-      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#054FF0;">AxiomOS · Flagship Program</div>
-      <h1 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(34px, 5.4vw, 68px); line-height:1.0; letter-spacing:-0.015em; margin:18px 0 0; max-width:16ch;">Behavior you can verify<span style="color:#054FF0;">.</span></h1>
-      <p style="font-size:15px; line-height:1.75; color:rgba(10,10,11,0.7); max-width:60ch; margin:24px 0 0;">Our work right now centers on a single system: a robotics operating system where every behavior is authenticated, analyzed, and admitted before it ever reaches hardware.</p>
-    </div>
-  </section>
+      <h1 style="margin:12vh 0 40px;">Research<span class="accent">.</span></h1>
 
-  <!-- THE STACK -->
-  <section style="background:#0a0a0b; color:#F9F8F3;">
-    <div style="max-width:1200px; margin:0 auto; padding:72px 32px;">
-      <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:rgba(249,248,243,0.5);">The pipeline — every behavior, before hardware</div>
-      <div class="responsive-grid env-grid" style="display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-top:28px;">
-        {stack.map(s => (
-          <div style="border:1px solid rgba(249,248,243,0.14); border-radius:18px; padding:22px; min-height:180px; display:flex; flex-direction:column; justify-content:space-between; position:relative;">
-            <div>
-              <span style={`display:inline-block; width:11px; height:11px; border-radius:999px; background:${s.dot};`}></span>
-              <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:rgba(249,248,243,0.45); margin-top:14px;">{s.name}</div>
-              <div style="font-family:'Bricolage Grotesque', sans-serif; font-size:30px; line-height:1.0; margin-top:6px;">{s.verb}</div>
+      <p>We study how robots can safely take on new behavior while they run. Our work sits between the intelligence that proposes actions and the hardware that carries them out.</p>
+
+      <h2 id="papers">Papers</h2>
+      <div class="stack" style="gap:40px;">
+        {papers.map(p => (
+          <article>
+            <div class="meta">
+              <span class="status"><span class="dot"></span>{p.status}</span>
+              <span>2026</span>
             </div>
-            <div style="font-size:12px; line-height:1.5; color:rgba(249,248,243,0.62);">{s.note}</div>
-            {s.arrow && <div style="position:absolute; top:18px; right:18px; font-size:13px; color:#5B86F6;">{s.arrow}</div>}
-          </div>
+            <h3>{p.title}</h3>
+            <div class="meta">{p.venue}</div>
+            <p>{p.abstract}</p>
+          </article>
         ))}
       </div>
-    </div>
-  </section>
 
-  <!-- PROGRAM DETAIL -->
-  <section style="background:#F9F8F3;">
-    <div style="max-width:1200px; margin:0 auto; padding:40px 32px 80px;">
-      <div class="responsive-split" style="display:grid; grid-template-columns:0.85fr 1.15fr; gap:48px; padding:48px 0; border-bottom:1px solid rgba(10,10,11,0.14); align-items:start;">
-        <div>
-          <div style="display:flex; align-items:center; gap:14px;">
-            <span style="font-family:'Bricolage Grotesque', sans-serif; font-size:44px; line-height:1; color:rgba(10,10,11,0.3);">01</span>
-            <span style="width:14px; height:14px; border-radius:999px; background:#DCFC73;"></span>
-          </div>
-          <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(29px, 4vw, 44px); line-height:1; margin:18px 0 0;">AxiomOS</h2>
-          <div style="font-size:10.5px; letter-spacing:0.14em; text-transform:uppercase; color:#054FF0; margin-top:10px;">Execute intelligence</div>
-          <div style="font-family:'Bricolage Grotesque', sans-serif; font-style:italic; font-size:21px; line-height:1.3; margin-top:20px; color:rgba(10,10,11,0.78);">Behavior that evolves without losing safety.</div>
-        </div>
-        <div>
-          <div style="background:#fff; border:1px solid rgba(10,10,11,0.1); border-radius:18px; padding:24px;">
-            <div style="font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,11,0.45);">Guiding question</div>
-            <p style="font-family:'Bricolage Grotesque', sans-serif; font-size:24px; line-height:1.25; margin:8px 0 0;">How can intelligent behavior execute safely?</p>
-          </div>
-          <p style="font-size:14px; line-height:1.75; color:rgba(10,10,11,0.72); margin:22px 0 0;">A robotics operating system built around runtime verification. Behaviors become hot-swappable units — authenticated, analyzed, admitted, and contained before they control hardware.</p>
-          <div style="font-size:10.5px; letter-spacing:0.16em; text-transform:uppercase; color:rgba(10,10,11,0.45); margin:22px 0 10px;">Research areas</div>
-          <div style="display:flex; flex-wrap:wrap; gap:8px;">
-            {areas.map(a => (
-              <span style="font-size:11.5px; letter-spacing:0.02em; background:#F0E8F9; border-radius:999px; padding:7px 13px; color:rgba(10,10,11,0.78);">{a}</span>
-            ))}
-          </div>
-        </div>
+      <h2>Questions we work on</h2>
+      <div class="stack">
+        <p><strong>Admission.</strong> How a new controller, policy or task is checked before it becomes active, and how it replaces a running behavior without stopping the robot.</p>
+        <p><strong>Authority.</strong> How to state which actuators a behavior may use, under what conditions, and when it must stop, and how to keep those limits in real time on real hardware.</p>
+        <p><strong>Recovery.</strong> How to version behaviors, keep the working state when an update is rejected, and record what ran and what it was allowed to control.</p>
       </div>
-    </div>
-  </section>
 
-  <!-- MEASURED RESULTS -->
-  <section style="background:#100F0D; color:#F9F8F3;">
-    <div style="max-width:1200px; margin:0 auto; padding:76px 32px;">
-      <div style="display:flex; justify-content:space-between; align-items:flex-end; gap:36px; flex-wrap:wrap;">
-        <div style="max-width:58ch;">
-          <div style="font-size:11px; letter-spacing:0.2em; text-transform:uppercase; color:#DCFC73;">Measured on Raspberry Pi 5</div>
-          <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(28px,4vw,46px); line-height:1.02; margin:16px 0 0;">Runtime verification has to fit the control budget.</h2>
-          <p style="font-size:13px; line-height:1.75; color:rgba(249,248,243,0.68); margin:18px 0 0;">Hardware measurements cover the boot path, BPF load path, interrupt execution path, verifier scaling, and cumulative utilization admission.</p>
-        </div>
-        <a href="/benchmarks" class="btn-benchmarks">Read benchmarks &amp; methodology →</a>
-      </div>
-      <div class="research-results">
-        <div>
-          <strong>99 ms</strong>
-          <span>Boot to init</span>
-        </div>
-        <div>
-          <strong>211 ns</strong>
-          <span>Hardware-to-BPF latency · average</span>
-        </div>
-        <div>
-          <strong>&lt;1 &micro;s</strong>
-          <span>BPF program load · average</span>
-        </div>
-        <div>
-          <strong>14 admitted</strong>
-          <span>15th copy-heavy attach rejected by utilization budget</span>
-        </div>
-      </div>
-    </div>
-  </section>
+      <h2>Open source</h2>
+      <p><a href="https://github.com/volnlabs/axiomos">github.com/volnlabs/axiomos</a></p>
 
-  <!-- CTA -->
-  <section style="background:#DDE7FE;">
-    <div style="max-width:1200px; margin:0 auto; padding:72px 32px; display:flex; justify-content:space-between; align-items:center; gap:32px; flex-wrap:wrap;">
-      <h2 style="font-family:'Bricolage Grotesque', sans-serif; font-weight:600; font-size:clamp(24px, 3.4vw, 37px); line-height:1.05; margin:0; max-width:22ch;">Read the papers behind AxiomOS.</h2>
-      <a href="/publications" class="btn-pubs">View publications →</a>
-    </div>
-  </section>
+      <h2 id="people">People</h2>
+      <p><strong>Utkarsh</strong>, main contributor. Open-source contributor to Limine and bpftime. Previously at Hyperledger and Cypherock. Now an ML researcher at Polymath (YC W26).</p>
 
+      <footer class="links" style="margin-top:120px;">
+        <a href="/" class="quiet">Home</a><span>·</span>
+        <a href="https://github.com/volnlabs" class="quiet">GitHub</a><span>·</span>
+        <a href="mailto:contact@volnlabs.com" class="quiet">Contact</a>
+      </footer>
+    </main>
+  </div>
 </Base>
 
 <style>
-  .btn-pubs { flex:none; text-decoration:none; background:#054FF0; color:#F9F8F3; font-size:12px; letter-spacing:0.06em; text-transform:uppercase; padding:15px 26px; border-radius:999px; }
-  .btn-pubs:hover { background:#043bc0; }
-  .btn-benchmarks { flex:none; text-decoration:none; border:1px solid rgba(249,248,243,0.35); color:#F9F8F3; font-size:10.5px; letter-spacing:0.1em; text-transform:uppercase; padding:14px 20px; }
-  .btn-benchmarks:hover { border-color:#DCFC73; color:#DCFC73; }
-  .research-results { display:grid; grid-template-columns:repeat(4,1fr); gap:0; margin-top:44px; border-top:1px solid rgba(249,248,243,0.16); border-bottom:1px solid rgba(249,248,243,0.16); }
-  .research-results > div { min-height:128px; padding:22px; border-right:1px solid rgba(249,248,243,0.12); }
-  .research-results > div:first-child { padding-left:0; }
-  .research-results > div:last-child { border-right:0; }
-  .research-results strong { display:block; font-family:'Bricolage Grotesque', sans-serif; font-size:34px; line-height:1; font-weight:500; }
-  .research-results span { display:block; margin-top:12px; font-size:10px; line-height:1.55; letter-spacing:0.11em; text-transform:uppercase; color:rgba(249,248,243,0.48); }
-  @media (max-width:1024px) {
-    .research-results { grid-template-columns:repeat(2,1fr); }
-    .research-results > div:nth-child(2) { border-right:0; }
-    .research-results > div:first-child { padding-left:22px; }
-  }
-  @media (min-width:641px) and (max-width:1024px) {
-    .env-grid { grid-template-columns:repeat(2,1fr) !important; }
-  }
-  @media (max-width:640px) {
-    .research-results { grid-template-columns:1fr; }
-    .research-results > div { border-right:0; }
-  }
+  article { display:flex; flex-direction:column; gap:10px; }
+  .meta { display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#9A9A9C; }
+  .status { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; color:#F9F8F3; }
+  h3 { font-family:'Instrument Serif', serif; font-weight:400; font-size:28px; line-height:1.1; color:#F9F8F3; margin:0; text-wrap:pretty; }
 </style>

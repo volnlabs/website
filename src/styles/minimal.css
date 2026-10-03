@@ -1,0 +1,17 @@
+/* Shared styles for the minimal (black) pages. */
+.min { background:#000; color:#D6D6D2; font-size:14px; line-height:1.75; min-height:100vh; padding:0 24px; }
+.min main { max-width:620px; margin:0 auto; padding:18vh 0 96px; }
+.min a { color:#F9F8F3; text-decoration:underline; text-decoration-color:#5C5C5E; text-underline-offset:3px; }
+.min a:hover { color:#5B86F6; text-decoration-color:#054FF0; }
+.min .quiet { color:#9A9A9C; text-decoration:none; }
+.min .quiet:hover { color:#F9F8F3; }
+.min .dot { width:6px; height:6px; border-radius:999px; background:#054FF0; flex:none; }
+.min h1 { font-family:'Archivo Black', sans-serif; font-weight:400; font-size:clamp(28px, 4.4vw, 40px); line-height:1.0; letter-spacing:-0.01em; text-transform:uppercase; color:#F9F8F3; margin:0 0 32px; text-wrap:pretty; }
+.min h1 .accent { color:#054FF0; }
+.min h2 { font-size:12px; font-weight:400; letter-spacing:0.14em; text-transform:uppercase; color:#7C7C7E; margin:72px 0 18px; }
+.min p { margin:0; text-wrap:pretty; }
+.min strong { color:#F9F8F3; }
+.min .stack { display:flex; flex-direction:column; gap:22px; }
+.min .brand { display:inline-flex; align-items:center; gap:10px; white-space:nowrap; color:#F9F8F3; font-weight:700; text-decoration:none; }
+.min .brand img { width:auto; display:block; }
+.min .links { display:flex; gap:10px; flex-wrap:wrap; font-size:12px; color:#5C5C5E; }

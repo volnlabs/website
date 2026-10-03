@@ -1,19 +1,15 @@
 ---
-import Nav from '../components/Nav.astro';
-import Footer from '../components/Footer.astro';
 import Analytics from '@vercel/analytics/astro';
 
 interface Props {
   title: string;
   description?: string;
-  theme?: 'light' | 'dark';
   bgColor?: string;
 }
 const {
   title,
-  description = 'VolnLabs builds the runtime for autonomous machines and robots — systems that learn and adapt at execution time. Research, publications, and open source in adaptive intelligence.',
-  theme = 'light',
-  bgColor = '#ECE9DF',
+  description = 'VolnLabs is building AxiomOS, a runtime-programmable kernel for robots.',
+  bgColor = '#000',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
 const fullTitle = `${title} — VolnLabs`;
@@ -41,40 +37,16 @@ const fullTitle = `${title} — VolnLabs`;
   <meta name="twitter:image" content={new URL('/og-image.png', Astro.site).href}>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif&family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <style is:global>
     html, body { margin: 0; padding: 0; }
     *, *::before, *::after { box-sizing: border-box; }
     ::selection { background: #054FF0; color: #F9F8F3; }
     a { color: inherit; }
-    .responsive-split { }
-    .responsive-grid { }
-    .table-scroll { overflow-x: auto; -webkit-overflow-scrolling: touch; }
-    @media (max-width: 1024px) {
-      .responsive-split { grid-template-columns: 1fr !important; }
-    }
-    @media (max-width: 640px) {
-      .responsive-grid { grid-template-columns: 1fr !important; }
-    }
   </style>
-<script is:inline>
-  function fit() {
-    if (window.innerWidth >= 1024) {
-      const scale = Math.min(0.68 * Math.max(window.innerWidth / 1200, 1), 1.12);
-      document.documentElement.style.zoom = scale;
-    } else {
-      document.documentElement.style.zoom = "";
-    }
-  }
-
-  fit();
-  window.addEventListener("resize", fit, { passive: true });
-</script>
 </head>
 <body style={`font-family:'Space Mono', monospace; -webkit-font-smoothing:antialiased; background:${bgColor}; color:#0a0a0b; overflow-x:hidden;`}>
-  <Nav theme={theme} />
   <slot />
-  <Footer />
   <Analytics />
 </body>
 </html>
