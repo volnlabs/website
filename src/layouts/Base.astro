@@ -1,5 +1,6 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
 
 interface Props {
   title: string;
@@ -48,5 +49,6 @@ const fullTitle = `${title} — VolnLabs`;
 <body style={`font-family:'Space Mono', monospace; -webkit-font-smoothing:antialiased; background:${bgColor}; color:#0a0a0b; overflow-x:hidden;`}>
   <slot />
   <Analytics />
+  <SpeedInsights />
 </body>
 </html>
