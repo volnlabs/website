@@ -33,7 +33,7 @@ test('keeps the old research people fragment useful', async () => {
 test('publishes stable routes and the pitch page in the sitemap', async () => {
   const sitemap = await readFile('dist/sitemap-0.xml', 'utf8');
   for (const route of routes) {
-    const url = route ? `https://www.volnlabs.com/${route}` : 'https://www.volnlabs.com';
+    const url = route ? `https://www.volnlabs.com/${route}` : 'https://www.volnlabs.com/';
     assert.ok(sitemap.includes(`<loc>${url}</loc>`), `sitemap missing ${url}`);
   }
 });
