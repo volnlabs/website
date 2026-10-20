@@ -9,7 +9,7 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
-    "test": "node --test",
+    "test": "npm run build && node --test --test-isolation=none",
     "astro": "astro"
   },
   "dependencies": {

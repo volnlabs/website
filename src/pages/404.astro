@@ -1,24 +1,15 @@
 ---
 import Base from '../layouts/Base.astro';
-import '../styles/minimal.css';
 ---
-<Base title="Page not found" description="The page you're looking for doesn't exist." bgColor="#000">
+<Base title="Page not found" description="The page you're looking for doesn't exist.">
   <div class="min">
-    <main style="padding-top:56px;">
-      <a href="/" class="brand">
-        <img src="/mark-light.png" alt="" style="height:18px;">
-        <span>VolnLabs</span>
-      </a>
-
-      <h1 style="margin:12vh 0 40px;">404<span class="accent">.</span></h1>
-
-      <p>This page doesn’t exist. The link may be broken, or the page may have moved.</p>
-
-      <footer class="links" style="margin-top:120px;">
-        <a href="/" class="quiet">Home</a><span>·</span>
-        <a href="/research" class="quiet">Research</a><span>·</span>
-        <a href="mailto:contact@volnlabs.com" class="quiet">Contact</a>
-      </footer>
+    <main id="main-content" class="compact">
+      <h1>404<span class="accent">.</span></h1>
+      <p class="lead">This page doesn’t exist. The link may be broken, or the page may have moved.</p>
+      <div class="actions">
+        <a href="/">Return home</a>
+        <a href="/contact" class="secondary">Contact VolnLabs</a>
+      </div>
     </main>
   </div>
 </Base>

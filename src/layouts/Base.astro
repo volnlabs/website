@@ -1,5 +1,8 @@
 ---
 import Analytics from '@vercel/analytics/astro';
+import SiteFooter from '../components/SiteFooter.astro';
+import SiteNav from '../components/SiteNav.astro';
+import '../styles/minimal.css';
 
 interface Props {
   title: string;
@@ -8,7 +11,7 @@ interface Props {
 }
 const {
   title,
-  description = 'VolnLabs is building AxiomOS, a runtime-programmable kernel for robots.',
+  description = 'VolnLabs builds Actryn and continues AxiomOS research for controlled execution on adaptive robots.',
   bgColor = '#000',
 } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
@@ -38,15 +41,12 @@ const fullTitle = `${title} — VolnLabs`;
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Instrument+Serif&family=Bricolage+Grotesque:opsz,wght@12..96,400..700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <style is:global>
-    html, body { margin: 0; padding: 0; }
-    *, *::before, *::after { box-sizing: border-box; }
-    ::selection { background: #054FF0; color: #F9F8F3; }
-    a { color: inherit; }
-  </style>
 </head>
-<body style={`font-family:'Space Mono', monospace; -webkit-font-smoothing:antialiased; background:${bgColor}; color:#0a0a0b; overflow-x:hidden;`}>
+<body style={`background:${bgColor}`}>
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <SiteNav />
   <slot />
+  <SiteFooter />
   <Analytics />
 </body>
 </html>

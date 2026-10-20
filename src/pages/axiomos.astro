@@ -1,0 +1,33 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="AxiomOS" description="AxiomOS is VolnLabs research into a runtime-programmable robot kernel with explicit limits on authority and physical effects.">
+  <div class="min">
+    <main id="main-content">
+      <div class="pill quiet"><span class="dot"></span>Research program · continuing</div>
+      <h1>New behavior without giving up control<span class="accent">.</span></h1>
+      <p class="lead">AxiomOS explores a standalone, runtime-programmable robot kernel for behavior that changes while the robot is running.</p>
+
+      <h2>Research questions</h2>
+      <ul class="rule-list">
+        <li><strong>Admission</strong><p>How a new controller, policy or task is checked before it becomes active.</p></li>
+        <li><strong>Authority</strong><p>How to state which actuators a behavior may use, under what conditions and when it must stop.</p></li>
+        <li><strong>Publication</strong><p>How one behavior replaces another without leaving stale work in control.</p></li>
+        <li><strong>Recovery</strong><p>How to preserve known state and evidence when an update, process or connection fails.</p></li>
+      </ul>
+
+      <h2>Relation to Actryn</h2>
+      <div class="stack">
+        <p>AxiomOS asks the broader operating-system question. Actryn applies part of that work to a narrower execution path on selected Linux systems while preserving existing drivers and robot stacks.</p>
+        <p>Development of AxiomOS continues. It is a research source for Actryn, not a production dependency that Actryn users must adopt.</p>
+      </div>
+
+      <h2>Status</h2>
+      <p>AxiomOS remains research software. Simulator, host and provisional hardware evidence must not be read as physical qualification or a general safety guarantee.</p>
+      <div class="actions">
+        <a href="https://github.com/volnlabs/axiomos">View AxiomOS on GitHub</a>
+        <a href="/research" class="secondary">Read the research</a>
+      </div>
+    </main>
+  </div>
+</Base>

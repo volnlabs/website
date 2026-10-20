@@ -1,0 +1,48 @@
+---
+import Base from '../layouts/Base.astro';
+---
+<Base title="Actryn" description="Actryn provides controlled execution from AI-agent proposals to robot controllers, with bounded authority and explicit recovery.">
+  <div class="min">
+    <main id="main-content">
+      <div class="pill quiet"><span class="dot"></span>v0.0.1 software-only developer preview</div>
+      <h1>The robot moved. The reply never arrived<span class="accent">.</span></h1>
+      <p class="lead">Actryn governs the path from an agent’s proposal to a robot controller without inventing success, failure or permission when systems lose contact.</p>
+
+      <h2>Why</h2>
+      <div class="stack">
+        <p>If a command reply is lost, resending may repeat a physical action. Assuming success may hide incomplete work.</p>
+        <p><strong>Actryn keeps the outcome unknown until the original operation is reconciled.</strong> New work remains blocked, and the system does not automatically resubmit the action.</p>
+      </div>
+
+      <h2>How it works</h2>
+      <ol class="sequence">
+        <li><h3>Propose</h3><p>An isolated agent proposes one typed skill with bounded parameters, not generated robot-local code.</p></li>
+        <li><h3>Authorize</h3><p>A local operator grants finite, scoped authority. Installing or pairing grants none.</p></li>
+        <li><h3>Enforce</h3><p>A Linux authority gate enforces grants, lifetime, revocation and stale-input rejection.</p></li>
+        <li><h3>Reconcile</h3><p>Controller state and evidence resolve uncertain outcomes before new work becomes eligible.</p></li>
+      </ol>
+
+      <h2>What exists today</h2>
+      <ul class="rule-list">
+        <li><strong>Native CLI and Python SDK</strong><p>One operation identity is retained from proposal to outcome across crashes and restarts.</p></li>
+        <li><strong>Server and robot services</strong><p>Signed role bundles, cancellation, replay rejection, crash recovery and evidence export.</p></li>
+        <li><strong>Linux kernel authority module</strong><p>Run under QEMU against a deterministic, non-actuating controller fixture.</p></li>
+      </ul>
+
+      <p class="notice">v0.0.1 is a software-only developer preview qualified by the sole maintainer. Independent installation and physical qualification have not been performed. The shipped target does not actuate hardware.</p>
+
+      <h2>Why Actryn, alongside AxiomOS</h2>
+      <div class="stack">
+        <p>Design partners wanted a full driver path without replacing their existing stack. Actryn is the narrower product for selected Linux environments: it keeps existing drivers and applies lessons from AxiomOS at the controller boundary.</p>
+        <p>AxiomOS continues as the broader programmable-kernel research program. Actryn is not a rename or a replacement for it.</p>
+      </div>
+
+      <h2>First pilot</h2>
+      <p>One bounded inspection workflow, one qualified controller and lab acceptance with motion observed independently before field use.</p>
+      <div class="actions">
+        <a href="mailto:utkarsh@volnlabs.com">Discuss a pilot</a>
+        <a href="https://github.com/volnlabs/actryn" class="secondary">View Actryn on GitHub</a>
+      </div>
+    </main>
+  </div>
+</Base>

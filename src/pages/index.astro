@@ -1,54 +1,47 @@
 ---
 import Base from '../layouts/Base.astro';
-import '../styles/minimal.css';
 ---
-<Base title="Runtime-programmable kernel for robots" description="VolnLabs is building AxiomOS, a runtime-programmable kernel for robots. Robots should be able to learn new behavior without anyone losing control of the hardware." bgColor="#000">
+<Base title="Controlled execution for AI-directed robots" description="VolnLabs builds Actryn for controlled robot execution and continues AxiomOS research into runtime-programmable robot kernels.">
   <div class="min">
-    <main>
-      <a href="/research#papers" class="pill quiet"><span class="dot"></span>2 papers accepted at NeurIPS 2026 →</a>
+    <main id="main-content">
+      <a href="/research#papers" class="pill quiet"><span class="dot"></span>2 papers accepted at NeurIPS 2026</a>
 
-      <h1>Robots should be able to learn new behavior without anyone losing control of the hardware<span class="accent">.</span></h1>
+      <h1>Controlled execution for AI-directed robots<span class="accent">.</span></h1>
+      <p class="lead">VolnLabs builds systems for the point where an AI agent’s proposal becomes a physical action.</p>
 
-      <p>VolnLabs is building AxiomOS, a runtime-programmable kernel for robots.</p>
+      <h2>Products and research</h2>
+      <div class="wide-stack">
+        <section class="product-row">
+          <div class="meta">Product · current focus</div>
+          <div class="stack">
+            <h3>Actryn</h3>
+            <p>A bounded execution path from an AI agent to a robot controller. It keeps operation identity, authority, cancellation and recovery explicit when replies are lost or systems restart.</p>
+            <p><a href="/actryn">See how Actryn works</a></p>
+          </div>
+        </section>
 
-      <h2 id="why">Why</h2>
-      <div class="stack">
-        <p><strong>Robots are starting to change themselves.</strong> Developers ship new controllers, policies learn, and AI systems propose new tasks. More and more, these changes reach a robot while it is running.</p>
-        <p><strong>Nothing decides what that new code may do.</strong> Today a new behavior either gets full authority over the motors or the whole system gets revalidated. One is unsafe, the other is slow.</p>
-        <p><strong>Physical actions can’t be rolled back.</strong> Software can undo a bad update. A robot arm can’t undo a motion it already made. Authority has to be settled before anything moves.</p>
+        <section class="product-row">
+          <div class="meta">Research · continuing</div>
+          <div class="stack">
+            <h3>AxiomOS</h3>
+            <p>A standalone, runtime-programmable robot kernel exploring how robots can accept new behavior within explicit limits on authority and physical effects.</p>
+            <p><a href="/axiomos">Explore AxiomOS</a></p>
+          </div>
+        </section>
       </div>
 
-      <h2 id="what">What</h2>
+      <h2>Why this matters</h2>
       <div class="stack">
-        <p><strong>Admit new behavior.</strong> A developer or an AI system proposes a new controller, policy or task. AxiomOS checks it and governs how it becomes active, including replacement while the system is running.</p>
-        <p><strong>Bound its authority.</strong> Every behavior gets defined permissions and limits: which actuators it can use, under what conditions, and when it must stop. Real-time execution, emergency stops, and guarantees that hold on actual hardware.</p>
-        <p><strong>Keep every update recoverable.</strong> Behaviors are versioned and activation is controlled. A rejected update leaves the working state intact. Audit records show what ran and what it was allowed to control.</p>
-        <p><strong>Fit the existing stack.</strong> Higher-level intelligence on Linux and NVIDIA-based systems proposes actions. AxiomOS governs execution near the hardware.</p>
+        <p><strong>Agents can propose robot actions.</strong> The robot still has to decide whether an operation is authorized, what limits apply, how long authority lasts and what happens when the outcome is uncertain.</p>
+        <p><strong>Physical actions cannot be rolled back.</strong> A timeout cannot prove that a robot did or did not move. Execution and recovery have to preserve what is known instead of guessing.</p>
       </div>
 
-      <h2 id="next">Where this goes</h2>
-      <div class="stack">
-        <p>VolnLabs is the company. AxiomOS is the core technology. The bigger ambition is adaptable industrial systems, and eventually robots building robots.</p>
-        <p><a href="mailto:contact@volnlabs.com" style="font-weight:700;">If you build robots and want them to learn safely, talk to us.</a></p>
+      <h2>Work with us</h2>
+      <p>We are looking for an inspection-robot OEM or integrator to evaluate one bounded workflow on a controller they already run.</p>
+      <div class="actions">
+        <a href="/contact">Discuss a pilot</a>
+        <a href="/research" class="secondary">Read the research</a>
       </div>
-
-      <footer>
-        <div class="brand">
-          <img src="/mark-light.png" alt="" style="height:22px;">
-          <span>VolnLabs</span>
-        </div>
-        <nav class="links">
-          <a href="/research" class="quiet">Research</a><span>·</span>
-          <a href="/research#people" class="quiet">People</a><span>·</span>
-          <a href="https://github.com/volnlabs" class="quiet">GitHub</a><span>·</span>
-          <a href="mailto:contact@volnlabs.com" class="quiet">Contact</a>
-        </nav>
-      </footer>
     </main>
   </div>
 </Base>
-
-<style>
-  .pill { display:inline-flex; align-items:center; gap:8px; font-size:12px; margin-bottom:28px; }
-  footer { display:flex; flex-direction:column; align-items:flex-start; gap:14px; margin-top:120px; }
-</style>

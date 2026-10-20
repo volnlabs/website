@@ -1,77 +1,64 @@
 ---
 import Base from '../layouts/Base.astro';
-import '../styles/minimal.css';
 
 const papers = [
   {
-    status: 'ACCEPTED · POSTER',
+    status: 'Accepted · Poster',
     title: 'An Authority Lifecycle for Self-Modifying Embodied Agents',
     venue: 'AgenticOS Workshop @ NeurIPS 2026',
-    abstract: 'Authority lifecycle for agents that modify and publish their own executable behavior at runtime. Separates proposal, activation, execution, resource, and effect authority. Versioned grants, continuous revalidation at privileged effects.',
+    abstract: 'Authority lifecycle for agents that modify and publish their own executable behavior at runtime. Separates proposal, activation, execution, resource and effect authority.',
   },
   {
-    status: 'ACCEPTED',
+    status: 'Accepted',
     title: 'Who Guards the Update? Transactional Publication Semantics for Continually Learning Embodied Agents',
     venue: 'CL4FMAgents Workshop @ NeurIPS 2026',
-    abstract: 'Safe publication of controller and behavior updates in continually learning embodied agents. Transactional semantics so stale or superseded behavior cannot keep control during updates. Part of AxiomOS’s runtime-evolution model.',
+    abstract: 'Transactional publication semantics so stale or superseded behavior cannot keep control during updates. Part of AxiomOS’s runtime-evolution model.',
   },
 ];
 ---
-<Base title="Research" description="VolnLabs research on how robots can safely take on new behavior while they run: admission, authority, and recovery. Papers at NeurIPS 2026 workshops." bgColor="#000">
+<Base title="Research" description="VolnLabs research on admission, authority, publication and recovery for robots that take on new behavior while running.">
   <div class="min">
-    <main style="padding-top:56px;">
-      <a href="/" class="brand">
-        <img src="/mark-light.png" alt="" style="height:18px;">
-        <span>VolnLabs</span>
-      </a>
-
-      <h1 style="margin:12vh 0 40px;">Research<span class="accent">.</span></h1>
-
-      <p>We study how robots can safely take on new behavior while they run. Our work sits between the intelligence that proposes actions and the hardware that carries them out.</p>
+    <main id="main-content">
+      <h1>Research<span class="accent">.</span></h1>
+      <p class="lead">We study how robots can take on new behavior while keeping authority, publication and recovery explicit.</p>
 
       <h2 id="papers">Papers</h2>
-      <div class="stack" style="gap:40px;">
-        {papers.map(p => (
-          <article>
+      <div class="wide-stack">
+        {papers.map((paper) => (
+          <article class="paper">
             <div class="meta">
-              <span class="status"><span class="dot"></span>{p.status}</span>
+              <span class="status"><span class="dot"></span>{paper.status}</span>
               <span>2026</span>
             </div>
-            <h3>{p.title}</h3>
-            <div class="meta">{p.venue}</div>
-            <p>{p.abstract}</p>
+            <h3>{paper.title}</h3>
+            <div class="meta">{paper.venue}</div>
+            <p>{paper.abstract}</p>
           </article>
         ))}
       </div>
 
-      <h2>Questions we work on</h2>
-      <div class="stack">
-        <p><strong>Admission.</strong> How a new controller, policy or task is checked before it becomes active, and how it replaces a running behavior without stopping the robot.</p>
-        <p><strong>Authority.</strong> How to state which actuators a behavior may use, under what conditions, and when it must stop, and how to keep those limits in real time on real hardware.</p>
-        <p><strong>Recovery.</strong> How to version behaviors, keep the working state when an update is rejected, and record what ran and what it was allowed to control.</p>
+      <h2>Programs</h2>
+      <div class="wide-stack">
+        <section class="product-row">
+          <div class="meta">Operating systems</div>
+          <div class="stack">
+            <h3>AxiomOS</h3>
+            <p>Runtime-programmable kernel research covering admission, authority, transactional publication and recovery.</p>
+            <p><a href="/axiomos">About AxiomOS</a></p>
+          </div>
+        </section>
+        <section class="product-row">
+          <div class="meta">Controlled execution</div>
+          <div class="stack">
+            <h3>Actryn</h3>
+            <p>A product path that carries bounded operations through authorization, Linux enforcement and reconciliation.</p>
+            <p><a href="/actryn">About Actryn</a></p>
+          </div>
+        </section>
       </div>
 
-      <h2>Open source</h2>
-      <p><a href="https://github.com/volnlabs/axiomos">github.com/volnlabs/axiomos</a></p>
-
       <h2 id="people">People</h2>
-      <p><strong>Utkarsh</strong>, main contributor. Open-source contributor to Limine and bpftime. Previously at Hyperledger and Cypherock. Now an ML research engineer at Polymath (YC W26).</p>
-
-      <h2>Programs</h2>
-      <p><a href="https://claude.com/programs/startups">Claude Startups</a> · Anthropic · 2026</p>
-
-      <footer class="links" style="margin-top:120px;">
-        <a href="/" class="quiet">Home</a><span>·</span>
-        <a href="https://github.com/volnlabs" class="quiet">GitHub</a><span>·</span>
-        <a href="mailto:contact@volnlabs.com" class="quiet">Contact</a>
-      </footer>
+      <p>Meet the people behind VolnLabs on the <a href="/about">About page</a>.</p>
     </main>
   </div>
 </Base>
-
-<style>
-  article { display:flex; flex-direction:column; gap:10px; }
-  .meta { display:flex; gap:12px; flex-wrap:wrap; font-size:12px; color:#9A9A9C; }
-  .status { display:inline-flex; align-items:center; gap:8px; white-space:nowrap; color:#F9F8F3; }
-  h3 { font-family:'Instrument Serif', serif; font-weight:400; font-size:28px; line-height:1.1; color:#F9F8F3; margin:0; text-wrap:pretty; }
-</style>
