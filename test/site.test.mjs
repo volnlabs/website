@@ -2,8 +2,8 @@ import assert from 'node:assert/strict';
 import { access, readFile } from 'node:fs/promises';
 import { test } from 'node:test';
 
-const routes = ['', 'actryn', 'axiomos', 'research', 'about', 'contact', 'pitch'];
-const navLinks = ['/actryn', '/axiomos', '/research', '/about', '/contact'];
+const routes = ['', 'actryn', 'the-fix-passed', 'axiomos', 'research', 'about', 'contact', 'pitch'];
+const navLinks = ['/actryn', '/research', '/about', '/contact'];
 const footerLinks = ['/actryn', '/axiomos', '/research', '/about', '/pitch'];
 
 const outputFile = (route) => route ? `dist/${route}/index.html` : 'dist/index.html';
