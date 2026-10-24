@@ -12,7 +12,21 @@ const evidence = (path: string) => `${repo}/blob/${commit}/${path}`;
       <h1>The reply never arrived. Did the robot move<span class="accent">?</span></h1>
       <p class="lead"><strong>Our first step toward evidence-backed robot releases.</strong> Actryn focuses on one part of the problem: keeping operation identity, authority and recovery explicit across lost replies and restarts.</p>
 
+      <figure class="film">
+        <video controls preload="metadata" playsinline poster="/video/actryn-explainer.jpg">
+          <source src="/video/actryn-explainer.mp4" type="video/mp4">
+          <track kind="captions" src="/video/actryn-explainer.vtt" srclang="en" label="English" default>
+        </video>
+        <figcaption>The idea in a minute and a half, then the real v0.0.1 software doing it. Nothing physical moves; the controller is simulated.</figcaption>
+      </figure>
+
       <h2 id="run">The run</h2>
+      <figure class="film">
+        <video controls preload="none" playsinline poster="/video/actryn-v0.0.1-run.jpg">
+          <source src="/video/actryn-v0.0.1-run.mp4" type="video/mp4">
+        </video>
+        <figcaption>The full recorded take on the signed v0.0.1 release: a dropped controller reply stays <code>OutcomeUnknown</code>, new work is refused until recovery, the next operation completes and both are exported. One continuous take in two QEMU virtual machines; waits sped up.</figcaption>
+      </figure>
       <p>The v0.0.1 operator workflow, run end to end by the maintainer on the exact release binaries. The final signed bundles were then verified with a fresh installation. Every step leaves evidence that is exported at the end.</p>
       <ol class="sequence">
         <li><h3>Install and diagnose</h3><p>Verify and activate the Server and Robot roles. Services start inhibited; installing and pairing grant no authority.</p></li>

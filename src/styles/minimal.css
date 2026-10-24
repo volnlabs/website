@@ -117,6 +117,10 @@ a:focus-visible { outline:2px solid var(--blue-light); outline-offset:4px; borde
 .sequence li::before { content:counter(step, decimal-leading-zero); position:absolute; left:0; color:var(--blue-light); font-size:12px; }
 .sequence p { margin-top:8px; }
 .notice { padding:20px 0 20px 18px; border-left:2px solid var(--blue); color:var(--muted); }
+.film { margin:32px 0 0; }
+.film video { display:block; width:100%; aspect-ratio:16 / 9; border:1px solid var(--rule); border-radius:8px; background:#0e1014; }
+.film figcaption { margin-top:10px; color:var(--muted); font-size:12px; line-height:1.6; }
+.film + p { margin-top:24px; }
 .meta { display:flex; flex-wrap:wrap; gap:10px 14px; color:var(--muted); font-size:12px; }
 .status { display:inline-flex; align-items:center; gap:8px; color:var(--paper); }
 .paper { display:flex; flex-direction:column; gap:10px; }

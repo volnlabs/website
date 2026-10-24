@@ -1,0 +1,115 @@
+WEBVTT
+
+00:00:00.300 --> 00:00:01.370
+you tap pay.
+
+00:00:01.370 --> 00:00:02.975
+the spinner spins.
+
+00:00:02.975 --> 00:00:04.224
+then, nothing.
+
+00:00:04.224 --> 00:00:05.829
+did it go through?
+
+00:00:05.829 --> 00:00:08.950
+tap again, and you might pay twice.
+
+00:00:09.850 --> 00:00:11.665
+robots have the same problem.
+
+00:00:11.665 --> 00:00:14.294
+a computer says: move this wheel a little.
+
+00:00:14.294 --> 00:00:15.796
+the robot maybe does it.
+
+00:00:15.796 --> 00:00:18.300
+and the reply gets lost on the way back.
+
+00:00:19.183 --> 00:00:21.456
+send it again, and it might move twice.
+
+00:00:21.456 --> 00:00:23.846
+assume it worked, and you might be wrong.
+
+00:00:23.846 --> 00:00:24.837
+both are guesses.
+
+00:00:24.837 --> 00:00:28.333
+and guessing with machines that move is how things go wrong.
+
+00:00:29.233 --> 00:00:31.104
+actryn does something simple.
+
+00:00:31.104 --> 00:00:35.682
+every command gets its own id, so it's never mixed up with another one.
+
+00:00:35.682 --> 00:00:38.584
+and permission is a timer, not a blank check.
+
+00:00:38.584 --> 00:00:40.583
+thirty seconds, then it's gone.
+
+00:00:41.483 --> 00:00:45.021
+when the reply goes missing, actryn doesn't guess.
+
+00:00:45.021 --> 00:00:47.993
+it writes down the honest answer: unknown.
+
+00:00:47.993 --> 00:00:49.620
+and it closes the gate.
+
+00:00:49.620 --> 00:00:52.733
+no new commands until a person says recover.
+
+00:00:53.633 --> 00:00:56.733
+after recovery, the robot can work again.
+
+00:00:56.733 --> 00:00:59.984
+but that lost command stays marked unknown.
+
+00:00:59.984 --> 00:01:00.589
+forever.
+
+00:01:00.589 --> 00:01:03.083
+nobody gets to pretend it worked.
+
+00:01:03.983 --> 00:01:05.103
+that's the idea.
+
+00:01:05.103 --> 00:01:07.483
+here's the real software doing it.
+
+00:01:08.083 --> 00:01:12.213
+this is actryn version 0.0.1, running in two virtual machines.
+
+00:01:12.213 --> 00:01:15.010
+i make the fake controller drop its reply.
+
+00:01:15.010 --> 00:01:16.942
+actryn says: outcome unknown.
+
+00:01:16.942 --> 00:01:18.807
+the next command is refused.
+
+00:01:18.807 --> 00:01:19.473
+i recover.
+
+00:01:19.473 --> 00:01:21.471
+the lost one is still unknown.
+
+00:01:21.471 --> 00:01:25.733
+the next one completes, and gets checked against the controller.
+
+00:01:27.150 --> 00:01:29.182
+nothing physical moved here.
+
+00:01:29.182 --> 00:01:32.229
+it's software, and a simulated controller.
+
+00:01:32.229 --> 00:01:34.043
+hardware testing is next.
+
+00:01:34.043 --> 00:01:36.800
+if you build robots, i'd love to talk.
