@@ -1,13 +1,14 @@
 ---
 import Base from '../layouts/Base.astro';
 ---
-<Base title="Know what changed before your robot ships" description="VolnLabs is building tools to help robotics teams decide which behavior changes are ready to deploy. Actryn is the first step: explicit execution and recovery when robot operations are interrupted.">
+<Base title="Know what changed before your robot ships" description="VolnLabs is building tools to help robotics teams establish whether a behavior change is ready to deploy, and whether that evidence still applies to the robot running it. Actryn is the first step: explicit execution and recovery when robot operations are interrupted.">
   <div class="min">
     <main id="main-content">
       <a href="/research#papers" class="pill quiet"><span class="dot"></span>Two papers accepted at NeurIPS 2026 workshops</a>
 
       <h1>Know what changed before your robot ships<span class="accent">.</span></h1>
-      <p class="lead">We’re building VolnLabs to help robotics teams decide which behavior changes are ready to deploy, and to keep the evidence from testing connected to what actually runs.</p>
+      <p class="lead">We’re building VolnLabs to help robotics teams establish whether a behavior change is ready to deploy, and whether that evidence still applies to the robot running it.</p>
+      <p class="lead soft">We tested this on this setup. Is that still the setup running now, and have we checked what happens when something fails?</p>
       <p class="lead">Actryn is our first step: making execution and recovery explicit when robot operations are interrupted.</p>
       <div class="actions">
         <a href="/actryn#run">See Actryn in action</a>
@@ -17,11 +18,15 @@ import Base from '../layouts/Base.astro';
       <h2>The problem</h2>
       <div class="stack">
         <p><strong>A passing test describes one particular setup.</strong> What happens when the controller, the configuration, execution timing or recovery behavior changes?</p>
+        <p><strong>Keeping the model unchanged does not keep the behavior unchanged.</strong> Lost calibration, a worn gripper, a degraded cable, a different execution path or a different reset procedure can each change the result.</p>
         <p>A successful run matters. The person who approves a release also needs to know what that run covered. <a href="/the-fix-passed">Read the example: the fix passed. Can we ship it?</a></p>
       </div>
 
       <h2>The job</h2>
-      <p>Establish what changed, what evidence supports the change, and which deployment conditions that evidence covers. Then approve it, reject it or ask for another test.</p>
+      <div class="stack">
+        <p><strong>Getting a robot working again and knowing it is working correctly are two different jobs.</strong></p>
+        <p>Establish what changed, what evidence supports the change, and whether the robot running it still matches the setup that evidence covers. Then approve it, reject it or ask for another test.</p>
+      </div>
 
       <h2>Our first step: Actryn</h2>
       <div class="stack">
@@ -31,7 +36,7 @@ import Base from '../layouts/Base.astro';
       </div>
 
       <h2>Start with one release</h2>
-      <p>We’re starting with inspection-robot manufacturers and integrators. Bring one inspection workflow and one proposed behavior change. We’ll scope the failure cases and the evidence needed to make that release decision on the stack you already run.</p>
+      <p>We’re starting with inspection-robot manufacturers and integrators. Bring one inspection workflow and one proposed behavior change. We’ll take the failure-and-recovery checks your engineers repeat by hand before trusting a robot again, and make them repeatable across every change, on the stack you already run.</p>
       <div class="actions">
         <a href="/contact">Discuss a release assessment</a>
       </div>
