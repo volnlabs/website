@@ -3,14 +3,14 @@ import Base from '../layouts/Base.astro';
 
 const pdf = '/pitch-deck.pdf';
 ---
-<Base title="Actryn Pitch Deck" description="The non-confidential VolnLabs pitch deck for Actryn.">
+<Base title="Pitch Deck" description="The non-confidential VolnLabs pitch deck. Actryn is the first implementation.">
   <main id="main-content" class="min pitch-wrap">
     <div class="pill quiet"><span class="dot"></span>Non-confidential · October 2026</div>
-    <h1>Actryn<span class="accent">.</span></h1>
-    <p class="lead">Controlled execution for AI-directed robots.</p>
+    <h1>VolnLabs<span class="accent">.</span></h1>
+    <p class="lead">Know what changed before your robot ships. The deck introduces Actryn, our first implementation: explicit execution and recovery when robot operations are interrupted.</p>
     <div class="actions">
       <a href={pdf} target="_blank" rel="noopener">Open the deck</a>
     </div>
-    <iframe class="deck" src={`${pdf}#view=FitH`} title="Actryn Pitch Deck"></iframe>
+    <iframe class="deck" src={`${pdf}#view=FitH`} title="VolnLabs Pitch Deck"></iframe>
   </main>
 </Base>

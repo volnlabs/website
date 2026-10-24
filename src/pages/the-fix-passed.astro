@@ -1,0 +1,59 @@
+---
+import Base from '../layouts/Base.astro';
+
+const sources = [
+  { name: 'Foxglove · ANYbotics customer story', href: 'https://foxglove.dev/customers/anybotics', note: 'An inspection robot blocked from its dock ran out of battery; retrieving the right logs took days before root-cause analysis could start.' },
+  { name: 'Boston Dynamics · Spot SDK release notes', href: 'https://dev.bostondynamics.com/docs/release_notes.html', note: 'Native interruption-event recording for pauses, restarts, lease errors and timeouts, with configurable keepalive behavior.' },
+  { name: 'ANYbotics · long-term outdoor ANYmal trials', href: 'https://www.anybotics.com/news/long-term-outdoor-anymal-trials-ensures-reliable-autonomous-performance/', note: 'Field testing and telemetry analysis across mobility, navigation and inspection.' },
+  { name: 'Miru · why server automation tools fail for robots', href: 'https://mirurobotics.substack.com/p/why-server-automation-tools-fail', note: 'Local edits and recalibration make a robot’s configuration drift from its intended state.' },
+  { name: 'ROS 2 design · actions', href: 'https://design.ros2.org/articles/actions.html', note: 'Goal identities, feedback, cancellation and results already exist in the standard stack.' },
+];
+---
+<Base title="The fix passed. Can we ship it?" description="An inspection-robot release example based on published industry incidents: the fix passed, but what does that run actually cover?">
+  <div class="min">
+    <main id="main-content">
+      <div class="pill quiet"><span class="dot"></span>Industry example · based on published incidents</div>
+      <h1>The fix passed. Can we ship it<span class="accent">?</span></h1>
+      <p class="lead">An inspection-robot release, built from failure modes that robotics teams have published.</p>
+
+      <h2>The example</h2>
+      <div class="stack">
+        <p>An inspection robot loses contact during a mission. The controller is still running, but the service coordinating the work restarts.</p>
+        <p>The engineering team investigates, changes the recovery logic and runs the mission again. It passes.</p>
+        <p><strong>Now comes a different question: can this change go onto the robots at customer sites?</strong></p>
+        <p>The successful run matters. But the release owner needs to know what it covered.</p>
+        <p>Was it the same controller version? The same mission configuration? What happened when contact disappeared? Could the restarted service distinguish an unfinished operation from one that had already completed? Which conclusions came from controller responses, and which came from observed behavior?</p>
+        <p>The job is not to collect another log. It is to connect the proposed change to evidence the team can use to approve it, reject it or ask for another test.</p>
+        <p>That is what we’re building VolnLabs around.</p>
+      </div>
+
+      <h2>Where we start</h2>
+      <div class="stack">
+        <p><strong>Actryn is our first step.</strong> It focuses on execution identity, authority and recovery when replies disappear or systems restart. The current release is a software-only preview, not a complete release-qualification system.</p>
+        <p>We’re starting with one inspection workflow and one release decision at a time. The goal is to make the tested setup, the observed result and the conditions for deployment explicit.</p>
+        <p>Passing a test is useful. Knowing which release decision it supports is the next step.</p>
+      </div>
+
+      <h2>Here is the first part we can show today</h2>
+      <div class="stack">
+        <p>Actryn v0.0.1 has been run end to end against a non-actuating controller fixture, by its maintainer and independently: install, pair, two operations in order, cancel, restart and recover, export. The page shows the run, the published receipts, the exact supported environment, and what has not been tested yet: physical testing.</p>
+        <p><a href="/actryn#run">See the run and its evidence</a></p>
+      </div>
+
+      <h2>What this example draws on</h2>
+      <ul class="rule-list">
+        {sources.map((source) => (
+          <li><strong><a href={source.href}>{source.name}</a></strong><p>{source.note}</p></li>
+        ))}
+      </ul>
+      <p class="notice">This example is a composite of the incidents above, not a single company’s account. Established robot stacks already record interruptions and carry action identities. A useful assessment tests your actual application-to-controller path, and “your native stack already handles this” is a valid result.</p>
+
+      <h2>Bring us one release decision</h2>
+      <p>One existing controller, one inspection workflow and one change you need to evaluate. We’ll scope the failure cases and evidence needed to decide.</p>
+      <div class="actions">
+        <a href="/contact">Discuss a release assessment</a>
+        <a href="/actryn" class="secondary">About Actryn</a>
+      </div>
+    </main>
+  </div>
+</Base>
