@@ -62,3 +62,11 @@ test('exposes direct email, booking, repository, and PDF destinations', async ()
   assert.ok(pitch.includes('href="/pitch-deck.pdf"'));
   await access('dist/pitch-deck.pdf');
 });
+
+test('embeds the explainer and the full recorded run on the Actryn page', async () => {
+  const actryn = await readFile('dist/actryn/index.html', 'utf8');
+  for (const file of ['actryn-explainer.mp4', 'actryn-explainer.vtt', 'actryn-explainer.jpg', 'actryn-v0.0.1-run.mp4', 'actryn-v0.0.1-run.jpg']) {
+    assert.ok(actryn.includes(`/video/${file}`), `actryn page missing /video/${file}`);
+    await access(`dist/video/${file}`);
+  }
+});
