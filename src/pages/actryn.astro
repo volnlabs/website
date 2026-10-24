@@ -68,7 +68,7 @@ const evidence = (path: string) => `${repo}/blob/${commit}/${path}`;
       <h2>Why</h2>
       <div class="stack">
         <p>If a command reply is lost, resending may repeat a physical action. Assuming success may hide incomplete work.</p>
-        <p><strong>Actryn keeps the outcome unknown until the original operation is reconciled.</strong> New work remains blocked, and the system does not automatically resubmit the action.</p>
+        <p><strong>Actryn keeps the outcome unknown unless controller evidence settles it.</strong> New work stays blocked until an explicit recovery, and nothing is resubmitted automatically.</p>
       </div>
 
       <h2>How it works</h2>
@@ -76,7 +76,7 @@ const evidence = (path: string) => `${repo}/blob/${commit}/${path}`;
         <li><h3>Propose</h3><p>An isolated agent proposes one typed skill with bounded parameters, not generated robot-local code.</p></li>
         <li><h3>Authorize</h3><p>A local operator grants finite, scoped authority. Installing or pairing grants none.</p></li>
         <li><h3>Enforce</h3><p>A Linux authority gate enforces grants, lifetime, revocation and stale-input rejection.</p></li>
-        <li><h3>Reconcile</h3><p>Controller state and evidence resolve uncertain outcomes before new work becomes eligible.</p></li>
+        <li><h3>Reconcile</h3><p>Controller state and evidence settle uncertain outcomes where they can. Anything they cannot settle stays recorded as unknown, and new work waits for an explicit recovery.</p></li>
       </ol>
 
       <h2>What exists today</h2>
@@ -94,7 +94,7 @@ const evidence = (path: string) => `${repo}/blob/${commit}/${path}`;
       </div>
 
       <h2>Start with one release</h2>
-      <p>Bring one inspection workflow and one behavior change you need to evaluate. We’ll scope the failure cases and evidence for that release decision, starting from your current stack.</p>
+      <p>Bring one inspection workflow and one behavior change you need to evaluate. We’ll take the failure-and-recovery checks your engineers repeat by hand before trusting a robot again, and make them repeatable across every change, starting from your current stack.</p>
       <div class="actions">
         <a href="/contact">Discuss a release assessment</a>
         <a href={repo} class="secondary">View Actryn on GitHub</a>

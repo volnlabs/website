@@ -30,7 +30,7 @@ import Base from '../layouts/Base.astro';
 
       <h2>Our first step: Actryn</h2>
       <div class="stack">
-        <p>Actryn keeps operation identity, authority and recovery explicit when replies are lost or systems restart. A missing reply does not tell you whether the robot moved, so Actryn keeps the outcome unknown until the original operation is reconciled.</p>
+        <p>Actryn keeps operation identity, authority and recovery explicit when replies are lost or systems restart. A missing reply does not tell you whether the robot moved, so Actryn keeps the outcome unknown unless controller evidence settles it. New work stays blocked until an explicit recovery, and nothing is resubmitted automatically.</p>
         <p>v0.0.1 is a software-only preview. We have reproduced it end to end against a non-actuating controller fixture and published the run’s evidence and limits.</p>
         <p><a href="/actryn#run">See the run, the evidence and the supported environment</a></p>
       </div>
